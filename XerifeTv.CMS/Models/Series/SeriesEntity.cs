@@ -2,7 +2,7 @@
 
 namespace XerifeTv.CMS.Models.Series;
 
-public class SeriesEntity : Midia
+public sealed class SeriesEntity : Midia
 {
   public string Category { get; set; } = string.Empty;
   public float Review { get; set; }
