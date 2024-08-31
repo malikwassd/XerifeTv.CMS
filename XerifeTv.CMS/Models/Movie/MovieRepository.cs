@@ -1,6 +1,9 @@
-﻿using XerifeTv.CMS.Models.Abstractions.Repositories;
+﻿using Microsoft.Extensions.Options;
+using XerifeTv.CMS.Models.Abstractions.Repositories;
 using XerifeTv.CMS.Models.Movie.Interfaces;
+using XerifeTv.CMS.MongoDB;
 
 namespace XerifeTv.CMS.Models.Movie;
 
-public class MovieRepository : BaseRepository<MovieEntity>, IMovieRepository;
+public sealed class MovieRepository(IOptions<DBSettings> options) 
+  : BaseRepository<MovieEntity>(ECollection.MOVIES, options), IMovieRepository;
