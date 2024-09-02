@@ -48,6 +48,8 @@ public sealed class MovieSevice(IMovieRepository _repository) : IMovieService
     try
     {
       var entity = dto.ToEntity();
+      entity.Id = Guid.NewGuid().ToString();
+
       await _repository.CreateAsync(entity);
       return Result<string>.Success(entity.Id);
     }
