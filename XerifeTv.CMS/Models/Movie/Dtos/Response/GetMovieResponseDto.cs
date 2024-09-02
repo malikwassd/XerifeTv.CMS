@@ -9,6 +9,7 @@ public class GetMovieResponseDto
   public string Synopsis { get; private set; } = string.Empty;
   public string Category { get; private set; } = string.Empty;
   public string PosterUrl { get; private set; } = string.Empty;
+  public string BannerUrl { get; private set; } = string.Empty;
   public int ReleaseYear { get; private set; }
   public int ParentalRating { get; private set; }
   public float Review { get; private set; } 
@@ -24,6 +25,7 @@ public class GetMovieResponseDto
       Synopsis = entity.Synopsis,
       Category = entity.Category,
       PosterUrl = entity.PosterUrl,
+      BannerUrl = entity.BannerUrl,
       ReleaseYear = entity.ReleaseYear,
       ParentalRating = entity.ParentalRating,
       Review = entity.Review,

@@ -4,15 +4,17 @@ namespace XerifeTv.CMS.Models.Movie.Dtos.Request;
 
 public class CreateMovieRequestDto
 {
-  public string Title { get; private set; } = string.Empty;
-  public string Synopsis { get; private set; } = string.Empty;
-  public string Category { get; private set; } = string.Empty;
-  public string PosterUrl { get; private set; } = string.Empty;
-  public string BannerUrl { get; private set; } = string.Empty;
-  public int ReleaseYear { get; private set; }
-  public int ParentalRating { get; private set; }
-  public float Review { get; private set; }
-  public Video? Video { get; private set; }
+  public string Title { get; init; } = string.Empty;
+  public string Synopsis { get; init; } = string.Empty;
+  public string Category { get; init; } = string.Empty;
+  public string PosterUrl { get; init; } = string.Empty;
+  public string BannerUrl { get; init; } = string.Empty;
+  public int ReleaseYear { get; init; }
+  public int ParentalRating { get; init; }
+  public float Review { get; init; }
+  public string VideoUrl { get; init; } = string.Empty;
+  public long VideoDuration { get; set; }
+  public string VideoStreamFormat { get; set; } = string.Empty;
 
   public MovieEntity ToEntity()
   {
@@ -26,7 +28,7 @@ public class CreateMovieRequestDto
       ReleaseYear = ReleaseYear,
       ParentalRating = ParentalRating,
       Review = Review,
-      Video = Video
+      Video = new Video(VideoUrl,VideoDuration,VideoStreamFormat)
     };
   }
 }

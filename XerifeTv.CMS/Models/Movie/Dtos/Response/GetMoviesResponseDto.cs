@@ -5,6 +5,7 @@ public class GetMoviesResponseDto
   public string Id { get; private set; } = string.Empty;
   public string Title { get; private set; } = string.Empty;
   public string Category { get; private set; } = string.Empty;
+  public string PosterUrl { get; private set; } = string.Empty;
   public int ReleaseYear { get; private set; }
   public DateTime RegistrationDate { get; private set; }  
 
@@ -15,6 +16,7 @@ public class GetMoviesResponseDto
       Id = entity.Id,
       Title = entity.Title,
       Category = entity.Category,
+      PosterUrl = entity.PosterUrl,
       ReleaseYear = entity.ReleaseYear,
       RegistrationDate = entity.CreateAt
     }; 
