@@ -1,7 +1,42 @@
-﻿@{
+﻿@using XerifeTv.CMS.Models.Movie.Dtos.Response;
+
+@{
   ViewData["Title"] = "Filmes";
+  var movies = (IEnumerable<GetMoviesResponseDto>)ViewData["data"]!;
 }
 
-<div class="text-center">
-  <h1 class="display-4">Filmes</h1>
+<div class="container">
+  <header>
+    <div class="d-flex align-items-center justify-content-between gap-4">
+      <span class="fs-3 fw-normal">Filmes</span>
+      <a class="btn btn-primary" asp-controller="Movies" asp-action="Form">
+        <i class="fa-solid fa-plus"></i> Cadastrar
+       </a>
+    </div>
+    <hr />
+  </header>
+
+  <div class="row gap-3">
+    @foreach (var movie in movies)
+    {
+      <div class="card col-2 pt-1">
+        <img src="@movie.PosterUrl" class="card-img-top" alt="@movie.Title">
+        <div class="card-body">
+          <h5 class="card-title text-nowrap overflow-hidden text-truncate">@movie.Title</h5>
+          <p class="card-text">@movie.Category</p>
+
+          <div class="d-flex gap-1">
+            <a class="btn btn-sm btn-success"><i class="fa-solid fa-eye"></i></a>
+            <a 
+              class="btn btn-sm btn-primary" 
+              asp-controller="Movies" 
+              asp-action="Form" 
+              asp-route-id="@movie.Id">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
 </div>
