@@ -14,7 +14,9 @@ public sealed class MovieSevice(IMovieRepository _repository) : IMovieService
       var response = await _repository.GetAsync();
 
       return Result<IEnumerable<GetMoviesResponseDto>>
-        .Success(response.Select(GetMoviesResponseDto.FromEntity));
+        .Success(response
+          .OrderByDescending(r => r.CreateAt)
+          .Select(GetMoviesResponseDto.FromEntity));
     }
     catch (Exception ex) 
     {
@@ -57,6 +59,49 @@ public sealed class MovieSevice(IMovieRepository _repository) : IMovieService
     {
       var error = new Error("500", ex.InnerException?.Message ?? ex.Message);
       return Result<string>.Failure(error);
+    }
+  }
+
+  public async Task<Result<string>> Update(UpdateMovieRequestDto dto)
+  {
+    try
+    {
+      var entity = dto.ToEntity();
+
+      var response = await _repository.GetAsync(entity.Id);
+
+      if (response is null)
+        return Result<string>.Failure(new Error("404", "content not found"));
+
+      entity.CreateAt = response.CreateAt;
+      entity.UpdateAt = DateTime.UtcNow;
+
+      await _repository.UpdateAsync(entity);
+      return Result<string>.Success(entity.Id);
+    }
+    catch (Exception ex)
+    {
+      var error = new Error("500", ex.InnerException?.Message ?? ex.Message);
+      return Result<string>.Failure(error);
+    }
+  }
+
+  public async Task<Result<bool>> Delete(string id)
+  {
+    try
+    {
+      var response = await _repository.GetAsync(id);
+
+      if (response is null)
+        return Result<bool>.Failure(new Error("404", "content not found"));
+
+      await _repository.DeleteAsync(id);
+      return Result<bool>.Success(true);
+    }
+    catch (Exception ex)
+    {
+      var error = new Error("500", ex.InnerException?.Message ?? ex.Message);
+      return Result<bool>.Failure(error);
     }
   }
 }

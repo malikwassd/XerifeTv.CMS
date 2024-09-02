@@ -1,4 +1,9 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
+﻿async function httpClient(url) {
+  return await axios.get(url, {
+    params: {
+      api_key: env['tmdbApiKey'],
+      language: 'pt-BR',
+      page: 1
+    }
+  });
+}
