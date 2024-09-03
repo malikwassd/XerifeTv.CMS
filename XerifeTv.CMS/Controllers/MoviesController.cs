@@ -8,7 +8,18 @@ public class MoviesController(IMovieService _service) : Controller
 {
   public async Task<IActionResult> Index()
   {
-    var response = await _service.Get();
+    if (!Request.QueryString.HasValue)
+    {
+      var _response = await _service.Get();
+
+      if (_response.IsSuccess) ViewData["data"] = _response.Data;
+
+      return View();
+    }
+
+    var search = Request.QueryString.Value?.Split('?')[1];
+
+    var response = await _service.GetByTitle(search ?? "");
 
     if (response.IsSuccess) ViewData["data"] = response.Data;
 
@@ -46,4 +57,6 @@ public class MoviesController(IMovieService _service) : Controller
 
     return RedirectToAction("Index");
   }
+
+
 }

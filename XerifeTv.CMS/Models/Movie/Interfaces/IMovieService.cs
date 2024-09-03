@@ -11,4 +11,5 @@ public interface IMovieService
   Task<Result<string>> Create(CreateMovieRequestDto dto);
   Task<Result<string>> Update(UpdateMovieRequestDto dto);
   Task<Result<bool>> Delete(string id);
+  Task<Result<IEnumerable<GetMoviesResponseDto>>> GetByTitle(string title);
 }

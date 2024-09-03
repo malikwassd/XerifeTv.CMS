@@ -104,4 +104,25 @@ public sealed class MovieSevice(IMovieRepository _repository) : IMovieService
       return Result<bool>.Failure(error);
     }
   }
+
+  public async Task<Result<IEnumerable<GetMoviesResponseDto>>> GetByTitle(string title)
+  {
+    try
+    {
+      var response = await _repository.GetByTitle(title);
+
+      if (response is null)
+        return Result<IEnumerable<GetMoviesResponseDto>>
+          .Failure(new Error("404", "content not found"));
+
+      return Result<IEnumerable<GetMoviesResponseDto>>
+        .Success(response.Select(GetMoviesResponseDto.FromEntity)
+          .OrderBy(r => r.Title));
+    }
+    catch (Exception ex)
+    {
+      var error = new Error("500", ex.InnerException?.Message ?? ex.Message);
+      return Result<IEnumerable<GetMoviesResponseDto>>.Failure(error);
+    }
+  }
 }

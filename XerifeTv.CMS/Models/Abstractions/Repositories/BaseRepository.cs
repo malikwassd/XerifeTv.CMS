@@ -7,7 +7,7 @@ namespace XerifeTv.CMS.Models.Abstractions.Repositories;
 
 public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
 {
-  private readonly IMongoCollection<T> _collection;
+  protected readonly IMongoCollection<T> _collection;
 
   public BaseRepository(ECollection collection, IOptions<DBSettings> dbSettings)
   {
