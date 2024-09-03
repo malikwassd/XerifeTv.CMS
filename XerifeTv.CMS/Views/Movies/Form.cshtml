@@ -2,9 +2,12 @@
 
 @{
   int[] parentalRatings = {0, 10, 12, 14, 16, 18};
+
   string[] streamFormats = {"mp4", "hls", "dash", "m3u8", "rtmp", "mpeg-ts", "WebM"};
 
   var movie = (GetMovieResponseDto?)ViewData["data"];
+
+  string submitMethod = movie is null ? "CreateForm" : "UpdateForm";
 }
 
 <div class="container">
@@ -41,7 +44,7 @@
   </header>
   
   <main>
-    <form asp-controller="Movies" asp-action="FormPost" method="post">
+    <form asp-controller="Movies" asp-action="@submitMethod" method="post">
       <input type="hidden" name="id" value="@movie?.Id">
 
       <div class="row mb-3">

@@ -26,35 +26,17 @@ public class MoviesController(IMovieService _service) : Controller
     return View();
   }
 
-  public async Task<IActionResult> FormPost(CreateMovieRequestDto createDto)
+  public async Task<IActionResult> CreateForm(CreateMovieRequestDto dto)
   {
-    var id = Request.Form["id"];
+    await _service.Create(dto);
 
-    if (string.IsNullOrEmpty(id))
-    {
-      await _service.Create(createDto);
-    }
-    else 
-    {
-      var updateDto = new UpdateMovieRequestDto
-      {
-        Id = id!,
-        Title = createDto.Title,
-        Synopsis = createDto.Synopsis,
-        Category = createDto.Category,
-        BannerUrl = createDto.BannerUrl,
-        PosterUrl = createDto.PosterUrl,
-        ParentalRating = createDto.ParentalRating,
-        ReleaseYear = createDto.ReleaseYear,
-        Review = createDto.Review,
-        VideoDuration = createDto.VideoDuration,
-        VideoStreamFormat = createDto.VideoStreamFormat,
-        VideoUrl = createDto.VideoUrl
-      };
+    return RedirectToAction("Index");
+  }
 
-      await _service.Update(updateDto);
-    }
- 
+  public async Task<IActionResult> UpdateForm(UpdateMovieRequestDto dto)
+  {
+    await _service.Update(dto);
+
     return RedirectToAction("Index");
   }
 
