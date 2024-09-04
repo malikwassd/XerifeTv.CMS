@@ -2,6 +2,12 @@
 
 @{
   ViewData["Title"] = "Filmes";
+
+  ICollection<string[]> filters = [];
+  filters.Add(["title", "Titulo"]);
+  filters.Add(["category", "Categoria"]);
+  filters.Add(["releaseYear", "Ano de Lançamento"]);
+
   var movies = (IEnumerable<GetMoviesResponseDto>)ViewData["data"]!;
 }
 
@@ -11,14 +17,32 @@
       <span class="fs-3 fw-normal">Filmes</span>
       <a class="btn btn-primary" asp-controller="Movies" asp-action="Form">
         <i class="fa-solid fa-plus"></i> Cadastrar
-       </a>
+      </a>
     </div>
     <hr />
   </header>
 
-  <div class="row mb-3 justify-content-end">
-    <div class="col-3">
-      <form class="input-group input-group-sm col-2" id="search-form">
+  <div class="row mb-3 justify-content-between">
+    <a class="col-1 fs-5" role="button" asp-controller="Movies" asp-action="Index">
+      <i class="fa-solid fa-rotate"></i>
+    </a>
+
+    <div class="col-5">
+      <form class="input-group input-group-sm" id="search-form">
+        <select class="form-select shadow-none" name="filter">
+          @foreach (var filter in filters)
+          {
+            if (filter[0].Equals(ViewData["filter"]))
+            {
+              <option value="@filter[0]" selected>@filter[1]</option>
+            }
+            else
+            {
+              <option value="@filter[0]">@filter[1]</option>   
+            }
+          }
+        </select>
+
         <input 
           type="text" 
           name="search" 
@@ -68,9 +92,9 @@
       e.preventDefault();
 
       const formData = new FormData(e.target);
-      const { search } = Object.fromEntries(formData.entries());
+      const { search, filter } = Object.fromEntries(formData.entries());
 
-      location.href = `/Movies?${search}`;
+      location.href = `/Movies?${filter}=${search}`;
     });
   </script>
 }

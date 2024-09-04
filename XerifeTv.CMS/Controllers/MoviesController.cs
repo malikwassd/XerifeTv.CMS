@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Text.RegularExpressions;
+using XerifeTv.CMS.Models.Movie.Enums;
 using XerifeTv.CMS.Models.Abstractions;
 using XerifeTv.CMS.Models.Movie.Dtos.Request;
 using XerifeTv.CMS.Models.Movie.Dtos.Response;
@@ -16,13 +16,41 @@ public class MoviesController(IMovieService _service) : Controller
     if (Request.QueryString.HasValue)
     {
       var search = Request.QueryString.Value
-      ?.Split('?')[1]
-      ?.Trim()
-      ?.Replace("%20", " ");
+        ?.Split('?')[1]
+        ?.Trim()
+        ?.Replace("%20", " ");
 
-      ViewData["search"] = search;
+      var searchParams = search?.Split("=");
 
-      result = await _service.GetByTitle(search ?? "");
+      string? filterSearch;
+      string? valueSearch;
+
+      if (searchParams?.Length < 2)
+      {
+        filterSearch = "title";
+        valueSearch = searchParams?[0];
+      }
+      else
+      {
+        filterSearch = searchParams?[0];
+        valueSearch = searchParams?[1];
+      }
+
+      ViewData["search"] = valueSearch;
+      ViewData["filter"] = filterSearch;
+
+      var filter = ESearchFilter.TITLE;
+
+      if (filterSearch == "category")
+      {
+        filter = ESearchFilter.CATEGORY;
+      }
+      else if (filterSearch == "releaseYear")
+      {
+        filter = ESearchFilter.RELEASE_YEAR;
+      }
+
+      result = await _service.GetByFilter(filter, valueSearch ?? "");
     }
     else
     {
