@@ -11,11 +11,10 @@ public sealed class MovieRepository(IOptions<DBSettings> options)
 {
   public async Task<IEnumerable<MovieEntity>> GetByTitle(string title)
   {
-    var response = await _collection.FindAsync(r => 
-      r.Title.Contains(title, StringComparison.CurrentCultureIgnoreCase));
+    var response = await _collection.Find(r => 
+      r.Title.Contains(title, StringComparison.CurrentCultureIgnoreCase))
+        .ToListAsync();
 
-    if (response is null) return [];
-
-    return response.ToEnumerable();
+    return response;
   }
 }

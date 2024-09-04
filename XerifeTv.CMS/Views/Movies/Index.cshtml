@@ -54,6 +54,11 @@
         </div>
       </div>
     }
+
+    @if (movies?.Count() <= 0)
+    {
+      <p>Nenhum registro encontrado.</p>
+    }
   </div>
 </div>
 
