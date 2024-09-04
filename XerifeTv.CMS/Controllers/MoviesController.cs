@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
+using XerifeTv.CMS.Models.Abstractions;
 using XerifeTv.CMS.Models.Movie.Dtos.Request;
+using XerifeTv.CMS.Models.Movie.Dtos.Response;
 using XerifeTv.CMS.Models.Movie.Interfaces;
 
 namespace XerifeTv.CMS.Controllers;
@@ -8,20 +11,25 @@ public class MoviesController(IMovieService _service) : Controller
 {
   public async Task<IActionResult> Index()
   {
-    if (!Request.QueryString.HasValue)
+    Result<IEnumerable<GetMoviesResponseDto>> result;
+
+    if (Request.QueryString.HasValue)
     {
-      var _response = await _service.Get();
+      var search = Request.QueryString.Value
+      ?.Split('?')[1]
+      ?.Trim()
+      ?.Replace("%20", " ");
 
-      if (_response.IsSuccess) ViewData["data"] = _response.Data;
+      ViewData["search"] = search;
 
-      return View();
+      result = await _service.GetByTitle(search ?? "");
+    }
+    else
+    {
+      result = await _service.Get();
     }
 
-    var search = Request.QueryString.Value?.Split('?')[1];
-
-    var response = await _service.GetByTitle(search ?? "");
-
-    if (response.IsSuccess) ViewData["data"] = response.Data;
+    if (result.IsSuccess) ViewData["data"] = result.Data;
 
     return View();
   }
@@ -57,6 +65,4 @@ public class MoviesController(IMovieService _service) : Controller
 
     return RedirectToAction("Index");
   }
-
-
 }

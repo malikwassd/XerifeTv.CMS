@@ -109,11 +109,7 @@ public sealed class MovieSevice(IMovieRepository _repository) : IMovieService
   {
     try
     {
-      var response = await _repository.GetByTitle(title);
-
-      if (response is null)
-        return Result<IEnumerable<GetMoviesResponseDto>>
-          .Failure(new Error("404", "content not found"));
+      var response = await _repository.GetByTitle(title) ?? [];
 
       return Result<IEnumerable<GetMoviesResponseDto>>
         .Success(response.Select(GetMoviesResponseDto.FromEntity)
