@@ -16,13 +16,20 @@
     <hr />
   </header>
 
-  <div class="row mb-3">
-    <form class="input-group input-group-sm col-2" id="search-form">
-      <input type="text" name="search" class="form-control shadow-none" required>
-      <button class="btn btn-success shadow-none" type="submit">
-        <i class="fa-solid fa-magnifying-glass"></i>
-      </button>
-    </form>
+  <div class="row mb-3 justify-content-end">
+    <div class="col-3">
+      <form class="input-group input-group-sm col-2" id="search-form">
+        <input 
+          type="text" 
+          name="search" 
+          class="form-control shadow-none" 
+          value="@ViewData["search"]"
+          required>
+        <button class="btn btn-success shadow-none" type="submit">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+    </div>
   </div>
 
   <div class="row gap-3">
