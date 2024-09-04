@@ -1,6 +1,7 @@
 ﻿using XerifeTv.CMS.Models.Abstractions;
 using XerifeTv.CMS.Models.Movie.Dtos.Request;
 using XerifeTv.CMS.Models.Movie.Dtos.Response;
+using XerifeTv.CMS.Models.Movie.Enums;
 using XerifeTv.CMS.Models.Movie.Interfaces;
 
 namespace XerifeTv.CMS.Models.Movie;
@@ -105,15 +106,14 @@ public sealed class MovieSevice(IMovieRepository _repository) : IMovieService
     }
   }
 
-  public async Task<Result<IEnumerable<GetMoviesResponseDto>>> GetByTitle(string title)
+  public async Task<Result<IEnumerable<GetMoviesResponseDto>>> GetByFilter(ESearchFilter filter, string value)
   {
     try
     {
-      var response = await _repository.GetByTitle(title) ?? [];
+      var response = await _repository.GetByFilter(filter, value) ?? [];
 
       return Result<IEnumerable<GetMoviesResponseDto>>
-        .Success(response.Select(GetMoviesResponseDto.FromEntity)
-          .OrderBy(r => r.Title));
+        .Success(response.Select(GetMoviesResponseDto.FromEntity));
     }
     catch (Exception ex)
     {
