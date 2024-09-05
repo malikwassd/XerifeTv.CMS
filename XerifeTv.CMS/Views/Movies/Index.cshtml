@@ -1,12 +1,13 @@
 ﻿@using XerifeTv.CMS.Models.Movie.Dtos.Response;
+@using XerifeTv.CMS.Models.Movie.Enums;
 
 @{
   ViewData["Title"] = "Filmes";
 
   ICollection<string[]> filters = [];
-  filters.Add(["title", "Titulo"]);
-  filters.Add(["category", "Categoria"]);
-  filters.Add(["releaseYear", "Ano de Lançamento"]);
+  filters.Add([ESearchFilter.TITLE.ToString(), "Titulo"]);
+  filters.Add([ESearchFilter.CATEGORY.ToString(), "Categoria"]);
+  filters.Add([ESearchFilter.RELEASE_YEAR.ToString(), "Ano de Lançamento"]);
 
   var movies = (IEnumerable<GetMoviesResponseDto>)ViewData["data"]!;
 }
@@ -28,11 +29,11 @@
     </a>
 
     <div class="col-5">
-      <form class="input-group input-group-sm" id="search-form">
+      <form class="input-group input-group-sm" asp-controller="Movies" asp-action="Index">
         <select class="form-select shadow-none" name="filter">
           @foreach (var filter in filters)
           {
-            if (filter[0].Equals(ViewData["filter"]))
+            if (filter[0].Equals(ViewBag.filter))
             {
               <option value="@filter[0]" selected>@filter[1]</option>
             }
@@ -47,7 +48,7 @@
           type="text" 
           name="search" 
           class="form-control shadow-none" 
-          value="@ViewData["search"]"
+          value="@ViewBag.search"
           required>
         <button class="btn btn-success shadow-none" type="submit">
           <i class="fa-solid fa-magnifying-glass"></i>
@@ -86,15 +87,3 @@
   </div>
 </div>
 
-@section scripts {
-  <script defer>
-    $('#search-form').submit(e => {
-      e.preventDefault();
-
-      const formData = new FormData(e.target);
-      const { search, filter } = Object.fromEntries(formData.entries());
-
-      location.href = `/Movies?${filter}=${search}`;
-    });
-  </script>
-}
