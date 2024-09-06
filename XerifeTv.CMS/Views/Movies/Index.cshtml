@@ -90,29 +90,18 @@
   {
     <nav class="mt-5">
       <ul class="pagination">
-        @if (ViewBag.HasPrevPage)
-        {
-          <li class="page-item">
-            <a 
-              class="page-link" 
-              aria-label="Previous" 
-              role="button"
-              asp-controller="Movies"
-              asp-action="Index"
-              asp-route-currentPage="@(ViewBag.CurrentPage - 1)">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-        }
-        else
-        {
-          <li class="page-item disabled">
-            <a class="page-link" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-        }
-
+        <li class="page-item @(!ViewBag.HasPrevPage ? "disabled" : "")">
+          <a 
+            class="page-link" 
+            aria-label="Previous" 
+            role="button"
+            asp-controller="Movies"
+            asp-action="Index"
+            asp-route-currentPage="@(ViewBag.CurrentPage - 1)">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        
         @for (int i = 1; i <= ViewBag.TotalPages; i++)
         {
            <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
@@ -126,30 +115,18 @@
            </li>  
         }
 
-        @if (ViewBag.HasNextPage)
-        {  
-          <li class="page-item">
-            <a 
-              class="page-link" 
-              aria-label="Next" 
-              role="button"
-              asp-controller="Movies"
-              asp-action="Index"
-              asp-route-currentPage="@(ViewBag.CurrentPage + 1)">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-        }
-        else
-        {
-          <li class="page-item disabled">
-            <a class="page-link" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-        }
+        <li class="page-item @(!ViewBag.HasNextPage ? "disabled" : "")">
+          <a 
+            class="page-link" 
+            aria-label="Next" 
+            role="button"
+            asp-controller="Movies"
+            asp-action="Index"
+            asp-route-currentPage="@(ViewBag.CurrentPage + 1)">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
       </ul>
     </nav>
   }
 </div>
-
