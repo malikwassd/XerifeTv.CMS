@@ -6,8 +6,6 @@
   string[] streamFormats = {"mp4", "hls", "dash", "m3u8", "rtmp", "mpeg-ts", "WebM"};
 
   var movie = (GetMovieResponseDto?)ViewData["data"];
-
-  string submitMethod = movie is null ? "CreateForm" : "UpdateForm";
 }
 
 <div class="container">
@@ -44,7 +42,7 @@
   </header>
   
   <main>
-    <form asp-controller="Movies" asp-action="@submitMethod" method="post">
+    <form asp-controller="Movies" asp-action="@(movie is null ? "CreateForm" : "UpdateForm")">
       <input type="hidden" name="id" value="@movie?.Id">
 
       <div class="row mb-3">
