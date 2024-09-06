@@ -7,11 +7,19 @@ namespace XerifeTv.CMS.Controllers;
 
 public class MoviesController(IMovieService _service) : Controller
 {
-  public async Task<IActionResult> Index()
+  public async Task<IActionResult> Index(int? currentPage)
   {
-    var result = await _service.Get();
+    var result = await _service.Get(currentPage ?? 1, 2);
 
-    ViewData["data"] = result.IsSuccess ? result.Data : [];
+    if (result.IsSuccess)
+    {
+      ViewData["data"] = result.IsSuccess ? result.Data?.Items : [];
+
+      ViewBag.CurrentPage = result.Data?.CurrentPage;
+      ViewBag.TotalPages = result.Data?.TotalPageCount ?? 1;
+      ViewBag.HasNextPage = result.Data?.HasNext;
+      ViewBag.HasPrevPage = result.Data?.HasPrevious;
+    }
 
     return View();
   }
@@ -21,8 +29,8 @@ public class MoviesController(IMovieService _service) : Controller
   {
     var result = await _service.GetByFilter(filter, search);
 
-    ViewBag.search = search;
-    ViewBag.filter = filter.ToString();
+    ViewBag.Search = search;
+    ViewBag.Filter = filter.ToString();
 
     ViewData["data"] = result.IsSuccess ? result.Data : [];
 

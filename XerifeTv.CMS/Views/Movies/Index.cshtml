@@ -33,7 +33,7 @@
         <select class="form-select shadow-none" name="filter">
           @foreach (var filter in filters)
           {
-            if (filter[0].Equals(ViewBag.filter))
+            if (filter[0].Equals(ViewBag.Filter))
             {
               <option value="@filter[0]" selected>@filter[1]</option>
             }
@@ -48,7 +48,7 @@
           type="text" 
           name="search" 
           class="form-control shadow-none" 
-          value="@ViewBag.search"
+          value="@ViewBag.Search"
           required>
         <button class="btn btn-success shadow-none" type="submit">
           <i class="fa-solid fa-magnifying-glass"></i>
@@ -85,5 +85,50 @@
       <p>Nenhum registro encontrado.</p>
     }
   </div>
+
+  @if (ViewBag.TotalPages > 0)
+  {
+    <nav class="mt-5">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+          if (ViewBag.CurrentPage == i)
+          {
+            <li class="page-item active">
+              <a 
+                class="page-link" 
+                asp-controller="Movies" 
+                asp-action="Index" 
+                asp-route-currentPage="@i">
+                @i
+               </a>
+            </li>
+          }
+          else
+          {
+            <li class="page-item">
+              <a 
+                class="page-link" 
+                asp-controller="Movies" 
+                asp-action="Index" 
+                asp-route-currentPage="@i">
+                @i
+               </a>
+            </li>
+          }
+        }
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  }
 </div>
 
