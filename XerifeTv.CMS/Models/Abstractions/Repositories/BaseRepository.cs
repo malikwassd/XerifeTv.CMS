@@ -2,7 +2,6 @@
 using MongoDB.Driver;
 using XerifeTv.CMS.MongoDB;
 using Microsoft.Extensions.Options;
-using MongoDB.Bson;
 
 namespace XerifeTv.CMS.Models.Abstractions.Repositories;
 
@@ -19,13 +18,15 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntit
 
   public virtual async Task<PagedList<T>> GetAsync(int currentPage, int limit)
   {
-    var count = await _collection.CountDocumentsAsync(FilterDefinition<T>.Empty);
+    var count = await _collection.CountDocumentsAsync(_ => true);
     var items = await _collection.Find(_ => true)
       .Skip(limit * (currentPage - 1))
       .Limit(limit)
       .ToListAsync();
 
-    return new PagedList<T>(currentPage, (count / limit), items);
+    var totalPages = (int)Math.Ceiling(count / (decimal)limit);
+
+    return new PagedList<T>(currentPage, totalPages, items);
   }
   
   public virtual async Task<T?> GetAsync(string id)

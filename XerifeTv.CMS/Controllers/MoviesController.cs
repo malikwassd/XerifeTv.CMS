@@ -27,12 +27,21 @@ public class MoviesController(IMovieService _service) : Controller
   [HttpPost]
   public async Task<IActionResult> Index(ESearchFilter filter, string search)
   {
-    var result = await _service.GetByFilter(filter, search);
+    var result = await _service.GetByFilter(
+      new GetMoviesByFilterRequestDto(filter, search, 1, 1));
 
     ViewBag.Search = search;
     ViewBag.Filter = filter.ToString();
 
-    ViewData["data"] = result.IsSuccess ? result.Data : [];
+    if (result.IsSuccess)
+    {
+      ViewData["data"] = result.IsSuccess ? result.Data?.Items : [];
+
+      ViewBag.CurrentPage = result.Data?.CurrentPage;
+      ViewBag.TotalPages = result.Data?.TotalPageCount ?? 1;
+      ViewBag.HasNextPage = result.Data?.HasNext;
+      ViewBag.HasPrevPage = result.Data?.HasPrevious;
+    }
 
     return View();
   }

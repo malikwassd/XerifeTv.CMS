@@ -1,7 +1,6 @@
 ﻿using XerifeTv.CMS.Models.Abstractions;
 using XerifeTv.CMS.Models.Movie.Dtos.Request;
 using XerifeTv.CMS.Models.Movie.Dtos.Response;
-using XerifeTv.CMS.Models.Movie.Enums;
 using XerifeTv.CMS.Models.Movie.Interfaces;
 
 namespace XerifeTv.CMS.Models.Movie;
@@ -108,19 +107,23 @@ public sealed class MovieSevice(IMovieRepository _repository) : IMovieService
     }
   }
 
-  public async Task<Result<IEnumerable<GetMoviesResponseDto>>> GetByFilter(ESearchFilter filter, string value)
+  public async Task<Result<PagedList<GetMoviesResponseDto>>> GetByFilter(GetMoviesByFilterRequestDto dto)
   {
     try
     {
-      var response = await _repository.GetByFilter(filter, value) ?? [];
+      var response = await _repository.GetByFilter(dto);
 
-      return Result<IEnumerable<GetMoviesResponseDto>>
-        .Success(response.Select(GetMoviesResponseDto.FromEntity));
+      var result = new PagedList<GetMoviesResponseDto>(
+        response.CurrentPage,
+        response.TotalPageCount,
+        response.Items.Select(GetMoviesResponseDto.FromEntity));
+
+      return Result<PagedList<GetMoviesResponseDto>>.Success(result);
     }
     catch (Exception ex)
     {
       var error = new Error("500", ex.InnerException?.Message ?? ex.Message);
-      return Result<IEnumerable<GetMoviesResponseDto>>.Failure(error);
+      return Result<PagedList<GetMoviesResponseDto>>.Failure(error);
     }
   }
 }
