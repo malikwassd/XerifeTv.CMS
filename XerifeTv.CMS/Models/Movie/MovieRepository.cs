@@ -31,6 +31,8 @@ public sealed class MovieRepository(IOptions<DBSettings> options)
       .Limit(dto.LimitResults)
       .ToListAsync();
 
-    return new PagedList<MovieEntity>(dto.CurrentPage, (count / dto.LimitResults), items);
+    var totalPages = (int)Math.Ceiling(count / (decimal)dto.LimitResults);
+
+    return new PagedList<MovieEntity>(dto.CurrentPage, totalPages, items);
   }
 }
