@@ -1,4 +1,17 @@
-﻿<!DOCTYPE html>
+﻿@{
+  ICollection<string[]> pagesView = [];
+  pagesView.Add(["Home", "Index", "Dashboard", "fa-solid fa-chart-simple"]);
+  pagesView.Add(["Movies", "Index", "Filmes", "fa-solid fa-film"]);
+  pagesView.Add(["Series", "Index", "Séries", "fa-solid fa-video"]);
+
+  /* pagesView[x][0] => Controller view
+   * pagesView[x][1] => Controller action view
+   * pagesView[x][2] => Page name in side menu
+   * pagesView[x][3] => Page icon in side menu
+  */
+}
+
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="utf-8" />
@@ -15,26 +28,21 @@
     <div class="row flex-nowrap">
       <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
         <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-          <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-            <span class="fs-5 d-none d-sm-inline text-primary fw-bold">Xerife.TV CMS</span>
+          <a href="/" class="d-flex align-items-center py-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <img class="w-75 d-none d-md-block" src="~/assets/logo.png" alt="Xerife.TV CMS" />
           </a>
           <ul class="nav nav-pills flex-column mb-sm-auto mb-0 mt-3 align-items-center align-items-sm-start" id="menu">
-            <li class="nav-item py-2">
-              <a class="nav-link align-middle px-0 text-light" asp-controller="Home" asp-action="Index">
-                <i class="fa-solid fa-chart-simple"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span>
-              </a>
-            </li>
-            <li class="nav-item py-2">
-              <a class="nav-link px-0 align-middle text-light" asp-controller="Movies" asp-action="Index">
-                <i class="fa-solid fa-film"></i> <span class="ms-1 d-none d-sm-inline">Filmes</span>
-              </a>
-            </li>
-
-            <li class="nav-item py-2">
-              <a class="nav-link px-0 align-middle text-light" asp-controller="Series" asp-action="Index">
-                <i class="fa-solid fa-video"></i> <span class="ms-1 d-none d-sm-inline">Séries</span>
-              </a>
-            </li>
+            @foreach (var pageView in pagesView)
+            {
+              <li class="nav-item py-2">
+                <a 
+                  class="nav-link px-0 align-middle fs-5 @(ViewData["Title"]?.ToString() == pageView[2] ? "text-info" : "text-light")" 
+                  asp-controller="@pageView[0]" 
+                  asp-action="@pageView[1]">
+                  <i class="@pageView[3]"></i> <span class="ms-1 d-none d-sm-inline">@pageView[2]</span>
+                </a>
+              </li>
+            }
           </ul>
           <hr>
         </div>
