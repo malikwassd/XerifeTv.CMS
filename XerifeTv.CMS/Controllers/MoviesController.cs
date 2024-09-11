@@ -34,15 +34,15 @@ public class MoviesController(IMovieService _service) : Controller
 
     if (result.IsSuccess)
     {
-      ViewData["data"] = result.IsSuccess ? result.Data?.Items : [];
-
       ViewBag.CurrentPage = result.Data?.CurrentPage;
       ViewBag.TotalPages = result.Data?.TotalPageCount ?? 1;
       ViewBag.HasNextPage = result.Data?.HasNext;
       ViewBag.HasPrevPage = result.Data?.HasPrevious;
+
+      return View(result.Data?.Items);
     }
 
-    return View();
+    return View(Enumerable.Empty<GetMoviesResponseDto>());
   }
 
   public async Task<IActionResult> Form(string? id)
@@ -50,7 +50,7 @@ public class MoviesController(IMovieService _service) : Controller
     if (id is not null)
     {
       var response = await _service.Get(id);
-      if (response.IsSuccess) ViewData["data"] = response.Data;
+      if (response.IsSuccess) return View(response.Data);
     }
 
     return View();

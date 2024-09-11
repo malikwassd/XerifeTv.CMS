@@ -1,13 +1,13 @@
 ﻿@using XerifeTv.CMS.Models.Movie.Dtos.Response;
 
+@model GetMovieResponseDto?
+
 @{
   ViewData["Title"] = "Filmes";
 
   int[] parentalRatings = {0, 10, 12, 14, 16, 18};
 
   string[] streamFormats = {"mp4", "hls", "dash", "m3u8", "rtmp", "mpeg-ts", "WebM"};
-
-  var movie = (GetMovieResponseDto?)ViewData["data"];
 }
 
 <div class="container">
@@ -18,11 +18,11 @@
           <i class="fa fa-undo" aria-hidden="true"></i>
         </a>
           <span class="fs-3 fw-normal">
-            @(movie is GetMovieResponseDto ? "Editar" : "Cadastrar") Filme
+            @(Model is GetMovieResponseDto ? "Editar" : "Cadastrar") Filme
           </span>
       </div>
 
-      @if (movie is null)
+      @if (Model is null)
       {
         <div class="d-flex align-items-center">
           <form class="input-group input-group-sm" id="imdb-form">
@@ -39,8 +39,8 @@
   </header>
   
   <main>
-    <form asp-controller="Movies" asp-action="@(movie is null ? "CreateForm" : "UpdateForm")">
-      <input type="hidden" name="id" value="@movie?.Id">
+    <form asp-controller="Movies" asp-action="@(Model is null ? "CreateForm" : "UpdateForm")">
+      <input type="hidden" name="id" value="@Model?.Id">
 
       <div class="row mb-3">
         <div class="col-6">
@@ -51,7 +51,7 @@
             id="title" 
             name="title" 
             placeholder="Digite aqui..." 
-            value="@movie?.Title"
+            value="@Model?.Title"
             required>
         </div>
 
@@ -63,7 +63,7 @@
             id="category" 
             name="category" 
             placeholder="ação, aventura, comédia..." 
-            value="@movie?.Category"
+            value="@Model?.Category"
             required>
         </div>
       </div>
@@ -76,7 +76,7 @@
           class="form-control" 
           placeholder="Digite aqui..." 
           style="height: 100px"
-          required>@movie?.Synopsis</textarea>
+          required>@Model?.Synopsis</textarea>
       </div>
 
       <div class="row mb-3">
@@ -88,7 +88,7 @@
             id="releaseYear" 
             name="releaseYear" 
             placeholder="2020" 
-            value="@movie?.ReleaseYear"
+            value="@Model?.ReleaseYear"
             required>
         </div>
 
@@ -99,7 +99,7 @@
             {
               <div class="form-check form-check-inline">
                 @{
-                  if (movie?.ParentalRating == year)
+                  if (Model?.ParentalRating == year)
                   {
                     <input 
                       class="form-check-input"
@@ -145,7 +145,7 @@
             id="review" 
             name="review" 
             placeholder="7.9"
-            value="@movie?.Review" 
+            value="@Model?.Review" 
             required>
         </div>
       </div>  
@@ -159,7 +159,7 @@
             id="posterUrl" 
             name="posterUrl" 
             placeholder="http://imagem.com/image.jpg" 
-            value="@movie?.PosterUrl"
+            value="@Model?.PosterUrl"
             required>
         </div>
 
@@ -171,7 +171,7 @@
             id="bannerUrl" 
             name="bannerUrl" 
             placeholder="http://imagem.com/image.jpg" 
-            value="@movie?.BannerUrl"
+            value="@Model?.BannerUrl"
             required>
         </div>
       </div>
@@ -184,7 +184,7 @@
           id="videoUrl" 
           name="videoUrl" 
           placeholder="http://video.com/video.m3u8" 
-          value="@movie?.Video?.Url"
+          value="@Model?.Video?.Url"
           required>
       </div>
 
@@ -199,7 +199,7 @@
             <option selected value="">Selecione uma opção</option>
             @foreach (string format in streamFormats)
             {
-              if (movie?.Video?.StreamFormat == format)
+              if (Model?.Video?.StreamFormat == format)
               {
                 <option value="@format" selected>@format</option>
               }
@@ -219,7 +219,7 @@
             id="videoDuration" 
             name="videoDuration" 
             placeholder="3600" 
-            value="@movie?.Video?.Duration"
+            value="@Model?.Video?.Duration"
             required>
         </div>
       </div>
@@ -228,10 +228,10 @@
 
       <div class="d-flex align-items-center justify-content-between">
         <button type="submit" class="btn btn-primary mt-2">
-          @(movie is GetMovieResponseDto ? "Editar" : "Cadastrar")
+          @(Model is GetMovieResponseDto ? "Editar" : "Cadastrar")
         </button>
 
-        @if (movie is GetMovieResponseDto)
+        @if (Model is GetMovieResponseDto)
         {
           <button type="button" class="btn btn-danger" onclick="deleteMovie()">
             <i class="fa fa-trash" aria-hidden="true"></i> Remover
@@ -275,7 +275,7 @@
     function deleteMovie() {
       if (!confirm('Deseja realmente remover o filme?')) return;
 
-      location.href = '/Movies/Delete/@movie?.Id'
+      location.href = '/Movies/Delete/@Model?.Id'
     }
   </script>
 }

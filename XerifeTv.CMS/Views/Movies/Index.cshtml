@@ -1,6 +1,8 @@
 ﻿@using XerifeTv.CMS.Models.Movie.Dtos.Response;
 @using XerifeTv.CMS.Models.Movie.Enums;
 
+@model IEnumerable<GetMoviesResponseDto>;
+
 @{
   ViewData["Title"] = "Filmes";
 
@@ -8,8 +10,6 @@
   filters.Add([ESearchFilter.TITLE.ToString().ToLower(), "Titulo"]);
   filters.Add([ESearchFilter.CATEGORY.ToString().ToLower(), "Categoria"]);
   filters.Add([ESearchFilter.RELEASE_YEAR.ToString().ToLower(), "Ano de Lançamento"]);
-
-  var movies = (IEnumerable<GetMoviesResponseDto>)ViewData["data"]!;
 }
 
 <div class="container">
@@ -68,7 +68,7 @@
   </div>
 
   <div class="row gap-3">
-    @foreach (var movie in movies)
+    @foreach (var movie in Model)
     {
       <div class="card col-2 pt-1">
         <img src="@movie.PosterUrl" class="card-img-top" alt="@movie.Title" loading="lazy">
@@ -95,7 +95,7 @@
       @await Html.PartialAsync("_DetailsModal", movie)
     }
 
-    @if (movies?.Count() <= 0)
+    @if (Model?.Count() <= 0)
     {
       <p>Nenhum registro encontrado.</p>
     }
