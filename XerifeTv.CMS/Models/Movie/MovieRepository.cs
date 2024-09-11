@@ -27,6 +27,7 @@ public sealed class MovieRepository(IOptions<DBSettings> options)
 
     var count = await _collection.CountDocumentsAsync(filter);
     var items = await _collection.Find(filter)
+      .SortBy(r => r.Title)
       .Skip(dto.LimitResults * (dto.CurrentPage - 1))
       .Limit(dto.LimitResults)
       .ToListAsync();

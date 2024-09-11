@@ -20,6 +20,7 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntit
   {
     var count = await _collection.CountDocumentsAsync(_ => true);
     var items = await _collection.Find(_ => true)
+      .SortByDescending(r => r.CreateAt)
       .Skip(limit * (currentPage - 1))
       .Limit(limit)
       .ToListAsync();
