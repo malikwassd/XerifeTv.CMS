@@ -1,0 +1,49 @@
+﻿
+<div 
+  class="modal fade" 
+  id="videoModal" 
+  data-bs-backdrop="static" 
+  data-bs-keyboard="false" 
+  tabindex="-1" 
+  aria-labelledby="videoModalLabel" 
+  aria-hidden="true">
+
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="videoModalLabel"></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <video id="player" class="video-js vjs-default-skin w-100" style="min-height: 45vh;" controls></video>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script defer>
+  const modal = document.getElementById('videoModal')
+
+  if (modal) {
+    modal.addEventListener('show.bs.modal', event => {
+      const button = event.relatedTarget
+
+      const modalTitle = document.querySelector('.modal-title')
+      modalTitle.textContent = button.getAttribute('data-bs-title')
+
+      const player = videojs('player', {
+        controls: true,
+        preload: 'auto'
+      })
+
+      const streamFormat = button.getAttribute('data-bs-video-format') === 'mp4' 
+        ? 'video/mp4'
+        : 'application/x-mpegURL'
+
+      player.src({
+        src: button.getAttribute('data-bs-video-url'),
+        type: streamFormat
+      })
+    })
+  }
+</script>

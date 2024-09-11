@@ -1,7 +1,7 @@
 ﻿@using XerifeTv.CMS.Models.Movie.Dtos.Response;
 @using XerifeTv.CMS.Models.Movie.Enums;
 
-@model IEnumerable<GetMoviesResponseDto>;
+@model IEnumerable<GetMovieResponseDto>;
 
 @{
   ViewData["Title"] = "Filmes";
@@ -67,6 +67,9 @@
     </div>
   </div>
 
+
+  @await Html.PartialAsync("_VideoModal")
+
   <div class="row gap-3">
     @foreach (var movie in Model)
     {
@@ -87,7 +90,16 @@
               asp-route-id="@movie.Id">
               <i class="fa-solid fa-pen-to-square"></i>
             </a>
-            <a class="btn btn-sm btn-secondary"><i class="fa-solid fa-play"></i></a>
+            <a 
+              class="btn btn-sm btn-secondary" 
+              data-bs-toggle="modal" 
+              data-bs-target="#videoModal"
+              data-bs-title="@movie.Title"
+              data-bs-banner="@movie.BannerUrl"
+              data-bs-video-url="@movie.Video?.Url"
+              data-bs-video-format="@movie.Video?.StreamFormat">
+              <i class="fa-solid fa-play"></i>
+            </a>
           </div>
         </div>
       </div>
