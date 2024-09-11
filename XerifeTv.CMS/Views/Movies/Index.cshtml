@@ -77,7 +77,9 @@
           <p class="card-text">@movie.Category</p>
 
           <div class="d-flex gap-1">
-            <a class="btn btn-sm btn-success"><i class="fa-solid fa-eye"></i></a>
+            <a class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#movielDetailsModal-@movie.Id">
+              <i class="fa-solid fa-eye"></i>
+            </a>
             <a 
               class="btn btn-sm btn-primary" 
               asp-controller="Movies" 
@@ -89,6 +91,8 @@
           </div>
         </div>
       </div>
+
+      @await Html.PartialAsync("_DetailsModal", movie)
     }
 
     @if (movies?.Count() <= 0)
