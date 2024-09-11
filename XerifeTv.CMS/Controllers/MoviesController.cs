@@ -13,7 +13,7 @@ public class MoviesController(IMovieService _service) : Controller
 
   public async Task<IActionResult> Index(int? currentPage, ESearchFilter? filter, string? search)
   {
-    Result<PagedList<GetMoviesResponseDto>>? result;
+    Result<PagedList<GetMovieResponseDto>>? result;
 
     if (filter is ESearchFilter && !string.IsNullOrEmpty(search))
     {
@@ -42,7 +42,7 @@ public class MoviesController(IMovieService _service) : Controller
       return View(result.Data?.Items);
     }
 
-    return View(Enumerable.Empty<GetMoviesResponseDto>());
+    return View(Enumerable.Empty<GetMovieResponseDto>());
   }
 
   public async Task<IActionResult> Form(string? id)

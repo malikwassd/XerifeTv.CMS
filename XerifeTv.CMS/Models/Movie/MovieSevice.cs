@@ -7,23 +7,23 @@ namespace XerifeTv.CMS.Models.Movie;
 
 public sealed class MovieSevice(IMovieRepository _repository) : IMovieService
 {
-  public async Task<Result<PagedList<GetMoviesResponseDto>>> Get(int currentPage, int limit)
+  public async Task<Result<PagedList<GetMovieResponseDto>>> Get(int currentPage, int limit)
   {
     try
     {
       var response = await _repository.GetAsync(currentPage, limit);
 
-      var result = new PagedList<GetMoviesResponseDto>(
+      var result = new PagedList<GetMovieResponseDto>(
         response.CurrentPage, 
         response.TotalPageCount, 
-        response.Items.Select(GetMoviesResponseDto.FromEntity));
+        response.Items.Select(GetMovieResponseDto.FromEntity));
 
-      return Result<PagedList<GetMoviesResponseDto>>.Success(result);
+      return Result<PagedList<GetMovieResponseDto>>.Success(result);
     }
     catch (Exception ex) 
     {
       var error = new Error("500", ex.InnerException?.Message ?? ex.Message);
-      return Result<PagedList<GetMoviesResponseDto>>.Failure(error);
+      return Result<PagedList<GetMovieResponseDto>>.Failure(error);
     }
   }
 
@@ -107,23 +107,23 @@ public sealed class MovieSevice(IMovieRepository _repository) : IMovieService
     }
   }
 
-  public async Task<Result<PagedList<GetMoviesResponseDto>>> GetByFilter(GetMoviesByFilterRequestDto dto)
+  public async Task<Result<PagedList<GetMovieResponseDto>>> GetByFilter(GetMoviesByFilterRequestDto dto)
   {
     try
     {
       var response = await _repository.GetByFilter(dto);
 
-      var result = new PagedList<GetMoviesResponseDto>(
+      var result = new PagedList<GetMovieResponseDto>(
         response.CurrentPage,
         response.TotalPageCount,
-        response.Items.Select(GetMoviesResponseDto.FromEntity));
+        response.Items.Select(GetMovieResponseDto.FromEntity));
 
-      return Result<PagedList<GetMoviesResponseDto>>.Success(result);
+      return Result<PagedList<GetMovieResponseDto>>.Success(result);
     }
     catch (Exception ex)
     {
       var error = new Error("500", ex.InnerException?.Message ?? ex.Message);
-      return Result<PagedList<GetMoviesResponseDto>>.Failure(error);
+      return Result<PagedList<GetMovieResponseDto>>.Failure(error);
     }
   }
 }
