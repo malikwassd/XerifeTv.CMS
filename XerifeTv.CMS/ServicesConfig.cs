@@ -29,6 +29,7 @@ public static class ServicesConfig
   private static IServiceCollection AddServices(this IServiceCollection services)
   {
     services.AddScoped<IMovieService, MovieSevice>();
+    services.AddScoped<ISeriesService, SeriesService>();
     return services;
   }
 }

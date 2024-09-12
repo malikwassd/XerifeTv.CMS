@@ -1,7 +1,108 @@
-﻿@{
+﻿@using XerifeTv.CMS.Models.Series.Dtos.Response;
+
+@model IEnumerable<GetSeriesResponseDto>;
+
+@{
   ViewData["Title"] = "Séries";
 }
 
-<div class="text-center">
-  <h1 class="display-4">Séries</h1>
+<div class="container">
+  <header>
+    <div class="d-flex align-items-center justify-content-between gap-4">
+      <span class="fs-3 fw-normal">Séries</span>
+      <a class="btn btn-primary" asp-controller="Series" asp-action="Form">
+        <i class="fa-solid fa-plus"></i> Cadastrar
+      </a>
+    </div>
+    <hr />
+  </header>
+
+  <div class="row mb-3 justify-content-between">
+    <a class="col-1 fs-5" role="button" asp-controller="Series" asp-action="Index">
+      <i class="fa-solid fa-rotate"></i>
+    </a>
+  </div>
+
+  <div class="row gap-3">
+    @foreach (var movie in Model)
+    {
+      <div class="card col-2 pt-1">
+        <img src="@movie.PosterUrl" class="card-img-top" alt="@movie.Title" loading="lazy">
+        <div class="card-body">
+          <h5 class="card-title text-nowrap overflow-hidden text-truncate">@movie.Title</h5>
+          <p class="card-text">@movie.Category</p>
+
+          <div class="d-flex gap-1">
+            <a class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#movielDetailsModal-@movie.Id">
+              <i class="fa-solid fa-eye"></i>
+            </a>
+            <a 
+              class="btn btn-sm btn-primary" 
+              asp-controller="Series" 
+              asp-action="Form" 
+              asp-route-id="@movie.Id">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+            <a 
+              class="btn btn-sm btn-secondary" 
+              data-bs-toggle="modal" 
+              data-bs-target="#videoModal"
+              data-bs-title="@movie.Title"
+              data-bs-banner="@movie.BannerUrl">
+              <i class="fa-solid fa-play"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (Model?.Count() <= 0)
+    {
+      <p>Nenhum registro encontrado.</p>
+    }
+  </div>
+
+  @if (ViewBag.TotalPages > 1)
+  {
+    <nav class="mt-5">
+      <ul class="pagination justify-content-center">
+        <li class="page-item @(!ViewBag.HasPrevPage ? "disabled" : "")">
+          <a 
+            class="page-link" 
+            aria-label="Previous" 
+            role="button"
+            asp-controller="Series"
+            asp-action="Index"
+            asp-route-currentPage="@(ViewBag.CurrentPage - 1)">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+           <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+              <a 
+                class="page-link" 
+                asp-controller="Series" 
+                asp-action="Index" 
+                asp-route-currentPage="@i">
+                @i
+               </a>
+           </li>  
+        }
+
+        <li class="page-item @(!ViewBag.HasNextPage ? "disabled" : "")">
+          <a 
+            class="page-link" 
+            aria-label="Next" 
+            role="button"
+            asp-controller="Series"
+            asp-action="Index"
+            asp-route-currentPage="@(ViewBag.CurrentPage + 1)">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  }
 </div>

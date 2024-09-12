@@ -20,7 +20,7 @@ public class MoviesController(IMovieService _service) : Controller
       result = await _service.GetByFilter(
         new GetMoviesByFilterRequestDto(
           filter ?? ESearchFilter.TITLE, 
-          search ?? "",
+          search ?? string.Empty,
           limitResultsPage, 
           currentPage ?? 1));
 

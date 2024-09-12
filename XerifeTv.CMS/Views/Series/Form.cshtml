@@ -1,0 +1,204 @@
+﻿@using XerifeTv.CMS.Models.Series.Dtos.Response;
+
+@model GetSeriesResponseDto?
+
+@{
+  ViewData["Title"] = "Séries";
+
+  int[] parentalRatings = {0, 10, 12, 14, 16, 18};
+}
+
+<div class="container">
+  <header>
+    <div class="d-flex justify-content-between">
+      <div class="d-flex align-items-center gap-4">
+        <a asp-controller="Series" asp-action="Index" class="fs-4">
+          <i class="fa fa-undo" aria-hidden="true"></i>
+        </a>
+          <span class="fs-3 fw-normal">
+          @(Model is GetSeriesResponseDto ? "Editar" : "Cadastrar") Série
+          </span>
+      </div>
+    </div>
+    <hr />
+  </header>
+  
+  <main>
+    <form asp-controller="Series" asp-action="@(Model is null ? "CreateForm" : "UpdateForm")">
+      <input type="hidden" name="id" value="@Model?.Id">
+
+      <div class="row mb-3">
+        <div class="col-6">
+          <label for="title" class="form-label">Titulo</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="title" 
+            name="title" 
+            placeholder="Digite aqui..." 
+            value="@Model?.Title"
+            required>
+        </div>
+
+        <div class="col-6">
+          <label for="category" class="form-label">Categoria</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="category" 
+            name="category" 
+            placeholder="ação, aventura, comédia..." 
+            value="@Model?.Category"
+            required>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="synopsis" class="form-label">Sinopse</label>
+        <textarea 
+          id="synopsis" 
+          name="synopsis" 
+          class="form-control" 
+          placeholder="Digite aqui..." 
+          style="height: 100px"
+          required>@Model?.Synopsis</textarea>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-4">
+          <label for="releaseYear" class="form-label">Ano de Lançamento</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="releaseYear" 
+            name="releaseYear" 
+            placeholder="2020" 
+            value="@Model?.ReleaseYear"
+            required>
+        </div>
+
+        <div class="col-5 px-4">
+          <label class="form-label">Classificação Indicativa</label>
+          <div>
+            @foreach (int year in parentalRatings)
+            {
+              <div class="form-check form-check-inline">
+                @{
+                  if (Model?.ParentalRating == year)
+                  {
+                    <input 
+                      class="form-check-input"
+                      type="radio"
+                      name="parentalRating"
+                      id="parentalRating-@year"
+                      value="@year"
+                      checked
+                      required>
+                  }
+                  else
+                  {
+                    <input 
+                      class="form-check-input"
+                      type="radio"
+                      name="parentalRating"
+                      id="parentalRating-@year"
+                      value="@year"
+                      required>
+                  }
+                }
+
+                <label class="form-check-label" for="parentalRating-@year">
+                  @if (year == 0)
+                  {
+                    <span>L</span>
+                  }
+                  else
+                  {
+                    <span>@year</span>
+                  }
+                </label>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="col-3">
+          <label for="review" class="form-label">Review</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="review" 
+            name="review" 
+            placeholder="7.9"
+            value="@Model?.Review" 
+            required>
+        </div>
+      </div>  
+
+      <div class="row mb-3">
+        <div class="col-6">
+          <label for="posterUrl" class="form-label">Poster (URL)</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="posterUrl" 
+            name="posterUrl" 
+            placeholder="http://imagem.com/image.jpg" 
+            value="@Model?.PosterUrl"
+            required>
+        </div>
+
+        <div class="col-6">
+          <label for="bannerUrl" class="form-label">Banner (URL)</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="bannerUrl" 
+            name="bannerUrl" 
+            placeholder="http://imagem.com/image.jpg" 
+            value="@Model?.BannerUrl"
+            required>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="col-6">
+          <label for="numberSeasons" class="form-label">Qtde Temporadas</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            id="numberSeasons" 
+            name="numberSeasons" 
+            placeholder="15" 
+            value="@Model?.NumberSeasons"
+            required>
+        </div>
+      </div>
+
+      <hr />
+
+      <div class="d-flex align-items-center justify-content-between">
+        <button type="submit" class="btn btn-primary mt-2">
+          @(Model is GetSeriesResponseDto ? "Editar" : "Cadastrar")
+        </button>
+
+        @if (Model is GetSeriesResponseDto)
+        {
+          <button type="button" class="btn btn-danger" onclick="deleteMovie()">
+            <i class="fa fa-trash" aria-hidden="true"></i> Remover
+          </button>
+        }
+      </div>
+    </form>
+  </main>
+</div>
+
+@section scripts {
+  <script defer>
+    function deleteMovie() {
+      if (!confirm('Deseja realmente remover a série?')) return;
+
+      location.href = '/Series/Delete/@Model?.Id'
+    }
+  </script>
+}

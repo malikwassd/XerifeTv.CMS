@@ -1,8 +1,6 @@
-﻿using XerifeTv.CMS.Models.Abstractions.ValueObjects;
+﻿namespace XerifeTv.CMS.Models.Series.Dtos.Request;
 
-namespace XerifeTv.CMS.Models.Movie.Dtos.Request;
-
-public class CreateMovieRequestDto
+public class CreateSeriesRequestDto
 {
   public string Title { get; init; } = string.Empty;
   public string Synopsis { get; init; } = string.Empty;
@@ -12,13 +10,11 @@ public class CreateMovieRequestDto
   public int ReleaseYear { get; init; }
   public int ParentalRating { get; init; }
   public float Review { get; init; }
-  public string VideoUrl { get; init; } = string.Empty;
-  public long VideoDuration { get; init; }
-  public string VideoStreamFormat { get; init; } = string.Empty;
+  public int NumberSeasons { get; init; }
 
-  public MovieEntity ToEntity()
+  public SeriesEntity ToEntity()
   {
-    return new MovieEntity
+    return new SeriesEntity
     {
       Title = Title,
       Synopsis = Synopsis,
@@ -27,8 +23,8 @@ public class CreateMovieRequestDto
       BannerUrl = BannerUrl,
       ReleaseYear = ReleaseYear,
       ParentalRating = ParentalRating,
-      Review = Review,
-      Video = new Video(VideoUrl,VideoDuration,VideoStreamFormat)
+      NumberSeasons = NumberSeasons,
+      Review = Review
     };
   }
 }

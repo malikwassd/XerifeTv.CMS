@@ -4,7 +4,7 @@ namespace XerifeTv.CMS.Models.Movie.Dtos.Request;
 
 public class UpdateMovieRequestDto
 {
-  public string Id {  get; set; } = string.Empty;
+  public string Id {  get; init; } = string.Empty;
   public string Title { get; init; } = string.Empty;
   public string Synopsis { get; init; } = string.Empty;
   public string Category { get; init; } = string.Empty;
@@ -14,8 +14,8 @@ public class UpdateMovieRequestDto
   public int ParentalRating { get; init; }
   public float Review { get; init; }
   public string VideoUrl { get; init; } = string.Empty;
-  public long VideoDuration { get; set; }
-  public string VideoStreamFormat { get; set; } = string.Empty;
+  public long VideoDuration { get; init; }
+  public string VideoStreamFormat { get; init; } = string.Empty;
 
   public MovieEntity ToEntity()
   {
