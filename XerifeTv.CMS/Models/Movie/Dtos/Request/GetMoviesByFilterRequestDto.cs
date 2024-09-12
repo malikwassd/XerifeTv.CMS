@@ -10,6 +10,6 @@ public class GetMoviesByFilterRequestDto(
 {
   public EMovieSearchFilter Filter { get; } = filter ?? EMovieSearchFilter.TITLE;
   public string Search { get; } = search ?? string.Empty;
-  public int LimitResults { get; } = limitResults ?? 0;
-  public int CurrentPage { get; } = currentPage ?? 0;
+  public int LimitResults { get; } = limitResults ?? 1;
+  public int CurrentPage { get; } = currentPage ?? 1;
 }

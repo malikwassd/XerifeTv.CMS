@@ -13,7 +13,7 @@ namespace XerifeTv.CMS.Models.Movie;
 public sealed class MovieRepository(IOptions<DBSettings> options) 
   : BaseRepository<MovieEntity>(ECollection.MOVIES, options), IMovieRepository
 {
-  public async Task<PagedList<MovieEntity>> GetByFilter(GetMoviesByFilterRequestDto dto)
+  public async Task<PagedList<MovieEntity>> GetByFilterAsync(GetMoviesByFilterRequestDto dto)
   {
     Expression<Func<MovieEntity, bool>> filterExpression = dto.Filter switch
     {

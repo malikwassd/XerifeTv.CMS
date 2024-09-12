@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using XerifeTv.CMS.Models.Abstractions;
 using XerifeTv.CMS.Models.Series.Dtos.Request;
 using XerifeTv.CMS.Models.Series.Dtos.Response;
+using XerifeTv.CMS.Models.Series.Enums;
 using XerifeTv.CMS.Models.Series.Interfaces;
 
 namespace XerifeTv.CMS.Controllers;
@@ -9,9 +11,22 @@ public class SeriesController(ISeriesService _service) : Controller
 {
   private const int limitResultsPage = 15;
 
-  public async Task<IActionResult> Index(int? currentPage)
+  public async Task<IActionResult> Index(int? currentPage, ESeriesSearchFilter? filter, string? search)
   {
-    var result = await _service.Get(currentPage ?? 1, limitResultsPage);
+    Result<PagedList<GetSeriesResponseDto>> result;
+
+    if (filter is ESeriesSearchFilter && !string.IsNullOrEmpty(search))
+    {
+      result = await _service.GetByFilter(
+        new GetSeriesByFilterRequestDto(filter, search, limitResultsPage, currentPage));
+
+      ViewBag.Search = search;
+      ViewBag.Filter = filter.ToString()?.ToLower();
+    }
+    else
+    {
+      result = await _service.Get(currentPage ?? 1, limitResultsPage);
+    }
 
     if (result.IsSuccess)
     {

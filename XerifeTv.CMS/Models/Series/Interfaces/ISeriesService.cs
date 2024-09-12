@@ -11,4 +11,5 @@ public interface ISeriesService
   Task<Result<string>> Create(CreateSeriesRequestDto dto);
   Task<Result<string>> Update(UpdateSeriesRequestDto dto);
   Task<Result<bool>> Delete(string id);
+  Task<Result<PagedList<GetSeriesResponseDto>>> GetByFilter(GetSeriesByFilterRequestDto dto);
 }

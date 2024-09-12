@@ -111,7 +111,7 @@ public sealed class MovieSevice(IMovieRepository _repository) : IMovieService
   {
     try
     {
-      var response = await _repository.GetByFilter(dto);
+      var response = await _repository.GetByFilterAsync(dto);
 
       var result = new PagedList<GetMovieResponseDto>(
         response.CurrentPage,

@@ -106,4 +106,24 @@ public class SeriesService(ISeriesRepository _repository) : ISeriesService
       return Result<bool>.Failure(error);
     }
   }
+
+  public async Task<Result<PagedList<GetSeriesResponseDto>>> GetByFilter(GetSeriesByFilterRequestDto dto)
+  {
+    try
+    {
+      var response = await _repository.GetByFilterAsync(dto);
+
+      var result = new PagedList<GetSeriesResponseDto>(
+        response.CurrentPage,
+        response.TotalPageCount,
+        response.Items.Select(GetSeriesResponseDto.FromEntity));
+
+      return Result<PagedList<GetSeriesResponseDto>>.Success(result);
+    }
+    catch (Exception ex)
+    {
+      var error = new Error("500", ex.InnerException?.Message ?? ex.Message);
+      return Result<PagedList<GetSeriesResponseDto>>.Failure(error);
+    }
+  }
 }
