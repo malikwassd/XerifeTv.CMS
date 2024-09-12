@@ -17,9 +17,9 @@ public sealed class MovieRepository(IOptions<DBSettings> options)
   {
     Expression<Func<MovieEntity, bool>> filterExpression = dto.Filter switch
     {
-      ESearchFilter.TITLE => r => r.Title.Contains(dto.Search, StringComparison.CurrentCultureIgnoreCase),
-      ESearchFilter.CATEGORY => r => r.Category.Contains(dto.Search, StringComparison.CurrentCultureIgnoreCase),
-      ESearchFilter.RELEASE_YEAR => r => r.ReleaseYear.Equals(int.Parse(dto.Search)),
+      EMovieSearchFilter.TITLE => r => r.Title.Contains(dto.Search, StringComparison.CurrentCultureIgnoreCase),
+      EMovieSearchFilter.CATEGORY => r => r.Category.Contains(dto.Search, StringComparison.CurrentCultureIgnoreCase),
+      EMovieSearchFilter.RELEASE_YEAR => r => r.ReleaseYear.Equals(int.Parse(dto.Search)),
       _ => r => r.Title.Contains(dto.Search, StringComparison.CurrentCultureIgnoreCase)
     };
 

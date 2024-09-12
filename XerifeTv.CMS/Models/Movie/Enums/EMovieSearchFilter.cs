@@ -1,6 +1,6 @@
 ﻿namespace XerifeTv.CMS.Models.Movie.Enums;
 
-public enum ESearchFilter
+public enum EMovieSearchFilter
 {
   TITLE,
   CATEGORY,

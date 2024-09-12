@@ -43,4 +43,18 @@ public class SeriesController(ISeriesService _service) : Controller
 
     return RedirectToAction("Index");
   }
+
+  public async Task<IActionResult> UpdateForm(UpdateSeriesRequestDto dto)
+  {
+    await _service.Update(dto);
+
+    return RedirectToAction("Index");
+  }
+
+  public async Task<IActionResult> Delete(string? id)
+  {
+    if (id is not null) await _service.Delete(id);
+
+    return RedirectToAction("Index");
+  }
 }

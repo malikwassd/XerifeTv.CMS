@@ -11,18 +11,14 @@ public class MoviesController(IMovieService _service) : Controller
 {
   private const int limitResultsPage = 15;
 
-  public async Task<IActionResult> Index(int? currentPage, ESearchFilter? filter, string? search)
+  public async Task<IActionResult> Index(int? currentPage, EMovieSearchFilter? filter, string? search)
   {
     Result<PagedList<GetMovieResponseDto>>? result;
 
-    if (filter is ESearchFilter && !string.IsNullOrEmpty(search))
+    if (filter is EMovieSearchFilter && !string.IsNullOrEmpty(search))
     {
       result = await _service.GetByFilter(
-        new GetMoviesByFilterRequestDto(
-          filter ?? ESearchFilter.TITLE, 
-          search ?? string.Empty,
-          limitResultsPage, 
-          currentPage ?? 1));
+        new GetMoviesByFilterRequestDto(filter, search, limitResultsPage, currentPage));
 
       ViewBag.Search = search;
       ViewBag.Filter = filter.ToString()?.ToLower();

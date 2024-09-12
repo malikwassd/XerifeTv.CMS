@@ -7,9 +7,9 @@
   ViewData["Title"] = "Filmes";
 
   ICollection<string[]> filters = [];
-  filters.Add([ESearchFilter.TITLE.ToString().ToLower(), "Titulo"]);
-  filters.Add([ESearchFilter.CATEGORY.ToString().ToLower(), "Categoria"]);
-  filters.Add([ESearchFilter.RELEASE_YEAR.ToString().ToLower(), "Ano de Lançamento"]);
+  filters.Add([EMovieSearchFilter.TITLE.ToString().ToLower(), "Titulo"]);
+  filters.Add([EMovieSearchFilter.CATEGORY.ToString().ToLower(), "Categoria"]);
+  filters.Add([EMovieSearchFilter.RELEASE_YEAR.ToString().ToLower(), "Ano de Lançamento"]);
 }
 
 <div class="container">
