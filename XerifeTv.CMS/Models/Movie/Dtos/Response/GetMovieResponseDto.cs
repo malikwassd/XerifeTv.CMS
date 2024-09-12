@@ -1,4 +1,5 @@
 ﻿using XerifeTv.CMS.Models.Abstractions.ValueObjects;
+using XerifeTv.CMS.Helpers;
 
 namespace XerifeTv.CMS.Models.Movie.Dtos.Response;
 
@@ -15,6 +16,7 @@ public class GetMovieResponseDto
   public float Review { get; private set; } 
   public DateTime RegistrationDate { get; private set; }
   public Video? Video { get; private set; }
+  public string DurationHHmm => DateTimeHelper.ConvertSecondsToHHmm(Video?.Duration ?? 0);
 
   public static GetMovieResponseDto FromEntity(MovieEntity entity)
   {
