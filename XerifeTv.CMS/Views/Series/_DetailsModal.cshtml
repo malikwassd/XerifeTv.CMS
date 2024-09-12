@@ -1,0 +1,71 @@
+﻿@using XerifeTv.CMS.Models.Series.Dtos.Response;
+
+@model GetSeriesResponseDto
+
+@{
+  Dictionary<int, string> parentalRatingColors = new();
+  parentalRatingColors.Add(0, "#0d915b");
+  parentalRatingColors.Add(10, "#0d6591");
+  parentalRatingColors.Add(12, "#94971a");
+  parentalRatingColors.Add(14, "#cf6a10");
+  parentalRatingColors.Add(16, "#ab1616");
+  parentalRatingColors.Add(18, "#232323");
+}
+
+<div 
+  class="modal fade" 
+  id="seriesDetailsModal-@Model.Id" 
+  tabindex="-1" 
+  aria-labelledby="seriesDetailsModal-@Model.Id-Label" 
+  aria-hidden="true">
+
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="w-100 position-relative" style="height: 15rem;">
+          <img src="@Model.BannerUrl" alt="banner" class="w-100 h-100"/>
+          <div 
+            class="w-100 h-100 position-absolute top-0" 
+            style="background: #000; opacity: 60%">
+          </div>
+          <img 
+            src="@Model.PosterUrl" 
+            alt="poster" 
+            class="w-25 h-100 top-50 position-absolute" 
+            style="left: 1rem; border: 3px solid #FFF; border-radius: 1rem;" />
+
+          <h5 class="position-absolute" style="top: 0.5rem; right: 0.5rem;">
+            <span class="badge text-bg-secondary" style="background: @parentalRatingColors[Model.ParentalRating]">
+              @(Model.ParentalRating == 0 ? "L" : Model.ParentalRating)
+            </span>
+          </h5>
+        </div>
+
+        <div class="w-100 d-flex gap-1">
+          <div style="min-width: 30%">
+            <div style="margin-top: 55%;" class="text-center">
+              <span class="text-warning"><i class="fa-solid fa-star"></i></span>
+              <span class="fst-italic">@Model.Review.ToString("0.0")</span>
+            </div>
+          </div>
+          <div style="width: 70%; margin-top: 1rem;">
+            <h2 class="overflow-hidden text-truncate ">@Model.Title</h2>
+
+            <p class="mt-3">@Model.Synopsis</p>
+
+            <hr />
+
+            <h5>
+              <span class="badge text-bg-secondary bg-secondary">@Model.Category</span>
+              <span class="badge text-bg-secondary bg-secondary">@Model.ReleaseYear</span>
+              <span class="badge text-bg-secondary bg-secondary">@Model.NumberSeasons Seasons</span>
+            </h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

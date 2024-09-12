@@ -67,28 +67,30 @@
   </div>
 
   <div class="row gap-3">
-    @foreach (var movie in Model)
+    @foreach (var serie in Model)
     {
       <div class="card col-2 pt-1">
-        <img src="@movie.PosterUrl" class="card-img-top" alt="@movie.Title" loading="lazy">
+        <img src="@serie.PosterUrl" class="card-img-top" alt="@serie.Title" loading="lazy">
         <div class="card-body">
-          <h5 class="card-title text-nowrap overflow-hidden text-truncate">@movie.Title</h5>
-          <p class="card-text">@movie.Category</p>
+          <h5 class="card-title text-nowrap overflow-hidden text-truncate">@serie.Title</h5>
+          <p class="card-text">@serie.Category</p>
 
           <div class="d-flex gap-1">
-            <a class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#movielDetailsModal-@movie.Id">
+            <a class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#seriesDetailsModal-@serie.Id">
               <i class="fa-solid fa-eye"></i>
             </a>
             <a 
               class="btn btn-sm btn-primary" 
               asp-controller="Series" 
               asp-action="Form" 
-              asp-route-id="@movie.Id">
+              asp-route-id="@serie.Id">
               <i class="fa-solid fa-pen-to-square"></i>
             </a>
           </div>
         </div>
       </div>
+
+      @await Html.PartialAsync("_DetailsModal", serie)
     }
 
     @if (Model?.Count() <= 0)
