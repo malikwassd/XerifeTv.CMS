@@ -52,10 +52,8 @@ public sealed class MovieSevice(IMovieRepository _repository) : IMovieService
     try
     {
       var entity = dto.ToEntity();
-      entity.Id = Guid.NewGuid().ToString();
-
-      await _repository.CreateAsync(entity);
-      return Result<string>.Success(entity.Id);
+      var response = await _repository.CreateAsync(entity);
+      return Result<string>.Success(response);
     }
     catch (Exception ex)
     {
@@ -69,15 +67,12 @@ public sealed class MovieSevice(IMovieRepository _repository) : IMovieService
     try
     {
       var entity = dto.ToEntity();
-
       var response = await _repository.GetAsync(entity.Id);
 
       if (response is null)
         return Result<string>.Failure(new Error("404", "content not found"));
 
       entity.CreateAt = response.CreateAt;
-      entity.UpdateAt = DateTime.UtcNow;
-
       await _repository.UpdateAsync(entity);
       return Result<string>.Success(entity.Id);
     }

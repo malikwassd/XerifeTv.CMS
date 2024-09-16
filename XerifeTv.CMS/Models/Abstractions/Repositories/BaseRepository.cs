@@ -33,11 +33,18 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntit
   public virtual async Task<T?> GetAsync(string id)
     => await _collection.Find(r => r.Id == id).FirstOrDefaultAsync();
 
-  public virtual async Task CreateAsync(T entity)
-    => await _collection.InsertOneAsync(entity);
+  public virtual async Task<string> CreateAsync(T entity)
+  {
+    entity.Id = Guid.NewGuid().ToString();
+    await _collection.InsertOneAsync(entity);
+    return entity.Id;
+  }
 
   public virtual async Task UpdateAsync(T entity)
-    => await _collection.ReplaceOneAsync(r => r.Id == entity.Id, entity);
+  {
+    entity.UpdateAt = DateTime.UtcNow;
+    await _collection.ReplaceOneAsync(r => r.Id == entity.Id, entity);
+  }
 
   public virtual async Task DeleteAsync(string id)
     => await _collection.DeleteOneAsync(r => r.Id == id);

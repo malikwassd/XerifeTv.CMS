@@ -123,14 +123,7 @@
                 }
 
                 <label class="form-check-label" for="parentalRating-@year">
-                  @if (year == 0)
-                  {
-                    <span>L</span>
-                  }
-                  else
-                  {
-                    <span>@year</span>
-                  }
+                  @(year == 0 ? "L" : year)
                 </label>
               </div>
             }
