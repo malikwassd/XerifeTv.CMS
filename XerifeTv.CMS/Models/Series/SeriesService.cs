@@ -121,4 +121,24 @@ public class SeriesService(ISeriesRepository _repository) : ISeriesService
       return Result<PagedList<GetSeriesResponseDto>>.Failure(error);
     }
   }
+
+  public async Task<Result<string>> CreateEpisode(CreateEpisodeRequestDto dto)
+  {
+    try
+    {
+      var response = await _repository.GetAsync(dto.SerieId);
+
+      if (response is null)
+        return Result<string>.Failure(new Error("404", "content not found"));
+
+      var result = await _repository.CreateEpisodeAsync(dto.SerieId, dto.ToEntity());
+
+      return Result<string>.Success(result);
+    }
+    catch (Exception ex)
+    {
+      var error = new Error("500", ex.InnerException?.Message ?? ex.Message);
+      return Result<string>.Failure(error);
+    }
+  }
 }

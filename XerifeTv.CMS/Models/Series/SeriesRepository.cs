@@ -34,4 +34,18 @@ public sealed class SeriesRepository(IOptions<DBSettings> options)
 
     return new PagedList<SeriesEntity>(dto.CurrentPage, totalPages, items);
   }
+
+  public async Task<string> CreateEpisodeAsync(string serieId, Episode episode)
+  {
+    episode.Id = Guid.NewGuid().ToString();
+
+    var response = await _collection
+      .Find(r => r.Id.Equals(serieId))
+      .FirstOrDefaultAsync();
+
+    response.Episodes.Add(episode);
+    await _collection.ReplaceOneAsync(r => r.Id.Equals(response.Id), response);
+
+    return episode.Id;
+  }
 }
