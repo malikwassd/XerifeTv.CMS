@@ -1,4 +1,5 @@
-﻿using XerifeTv.CMS.Models.Abstractions;
+﻿using MongoDB.Driver.Linq;
+using XerifeTv.CMS.Models.Abstractions;
 using XerifeTv.CMS.Models.Series.Dtos.Request;
 using XerifeTv.CMS.Models.Series.Dtos.Response;
 using XerifeTv.CMS.Models.Series.Interfaces;
@@ -73,6 +74,7 @@ public class SeriesService(ISeriesRepository _repository) : ISeriesService
         return Result<string>.Failure(new Error("404", "content not found"));
 
       entity.CreateAt = response.CreateAt;
+      entity.Episodes = response.Episodes;
       await _repository.UpdateAsync(entity);
       return Result<string>.Success(entity.Id);
     }
@@ -119,6 +121,31 @@ public class SeriesService(ISeriesRepository _repository) : ISeriesService
     {
       var error = new Error("500", ex.InnerException?.Message ?? ex.Message);
       return Result<PagedList<GetSeriesResponseDto>>.Failure(error);
+    }
+  }
+
+  public async Task<Result<GetEpisodesResponseDto>> GetEpisodesBySeason(string serieId, int season)
+  {
+    try
+    {
+      var response = await _repository.GetAsync(serieId);
+
+      if (response is null)
+        return Result<GetEpisodesResponseDto>
+          .Failure(new Error("404", "content not found"));
+
+      response.Episodes = response.Episodes
+        .Where(r => r.Season.Equals(season))
+        .ToList();
+
+      var result = GetEpisodesResponseDto.FromEntity(response);
+
+      return Result<GetEpisodesResponseDto>.Success(result);
+    }
+    catch (Exception ex)
+    {
+      var error = new Error("500", ex.InnerException?.Message ?? ex.Message);
+      return Result<GetEpisodesResponseDto>.Failure(error);
     }
   }
 
