@@ -52,14 +52,14 @@ public class MoviesController(IMovieService _service) : Controller
     return View();
   }
 
-  public async Task<IActionResult> CreateForm(CreateMovieRequestDto dto)
+  public async Task<IActionResult> Create(CreateMovieRequestDto dto)
   {
     await _service.Create(dto);
 
     return RedirectToAction("Index");
   }
 
-  public async Task<IActionResult> UpdateForm(UpdateMovieRequestDto dto)
+  public async Task<IActionResult> Update(UpdateMovieRequestDto dto)
   {
     await _service.Update(dto);
 

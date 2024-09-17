@@ -15,16 +15,16 @@
         <a asp-controller="Series" asp-action="Index" class="fs-4">
           <i class="fa fa-undo" aria-hidden="true"></i>
         </a>
-          <span class="fs-3 fw-normal">
-          @(Model is GetSeriesResponseDto ? "Editar" : "Cadastrar") Série
-          </span>
+        <span class="fs-3 fw-normal">
+        @(Model is GetSeriesResponseDto ? "Editar" : "Cadastrar") Série
+        </span>
       </div>
     </div>
     <hr />
   </header>
   
   <main>
-    <form asp-controller="Series" asp-action="@(Model is null ? "CreateForm" : "UpdateForm")">
+    <form asp-controller="Series" asp-action="@(Model is null ? "Create" : "Update")">
       <input type="hidden" name="id" value="@Model?.Id">
 
       <div class="row mb-3">

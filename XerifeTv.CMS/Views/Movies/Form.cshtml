@@ -17,9 +17,9 @@
         <a asp-controller="Movies" asp-action="Index" class="fs-4">
           <i class="fa fa-undo" aria-hidden="true"></i>
         </a>
-          <span class="fs-3 fw-normal">
-            @(Model is GetMovieResponseDto ? "Editar" : "Cadastrar") Filme
-          </span>
+        <span class="fs-3 fw-normal">
+          @(Model is GetMovieResponseDto ? "Editar" : "Cadastrar") Filme
+        </span>
       </div>
 
       @if (Model is null)
@@ -39,7 +39,7 @@
   </header>
   
   <main>
-    <form asp-controller="Movies" asp-action="@(Model is null ? "CreateForm" : "UpdateForm")">
+    <form asp-controller="Movies" asp-action="@(Model is null ? "Create" : "Update")">
       <input type="hidden" name="id" value="@Model?.Id">
 
       <div class="row mb-3">

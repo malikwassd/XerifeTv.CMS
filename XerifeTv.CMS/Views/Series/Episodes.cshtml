@@ -1,0 +1,26 @@
+﻿@using XerifeTv.CMS.Models.Series;
+
+@model IEnumerable<Episode>;
+
+@{
+  ViewData["Title"] = "Séries";
+}
+
+<div class="container">
+  @await Html.PartialAsync("_EpisodeFormModal")
+
+  <header>
+    <div class="d-flex align-items-center justify-content-between gap-4">
+      <div class="d-flex align-items-center gap-4">
+        <a asp-controller="Series" asp-action="Index" class="fs-4">
+          <i class="fa fa-undo" aria-hidden="true"></i>
+        </a>
+        <span class="fs-3 fw-normal">Episódios</span>
+      </div>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#episodeFormModal">
+        <i class="fa-solid fa-plus"></i> Cadastrar
+      </button>
+    </div>
+    <hr />
+  </header>
+</div>

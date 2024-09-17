@@ -1,0 +1,118 @@
+﻿@{
+  string[] streamFormats = {"mp4", "hls", "dash", "m3u8", "rtmp", "mpeg-ts", "WebM"};
+}
+
+<div 
+  class="modal fade" 
+  id="episodeFormModal" 
+  data-bs-backdrop="static" 
+  data-bs-keyboard="false" 
+  tabindex="-1"
+  aria-labelledby="episodeFormModalLabel"
+  aria-hidden="true">
+
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <form class="modal-content" asp-controller="Series" asp-action="CreateEpisode">
+      <input type="hidden" name="serieId" value="@ViewBag.SerieId" />
+      <input type="hidden" name="id" value="" />
+
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="episodeFormModalLabel">Cadastrar Episódio</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row mb-2">
+          <div class="col-12">
+            <label for="title" class="form-label">Titulo</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="title" 
+              name="title" 
+              placeholder="Digite aqui..." 
+              required>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <div class="col-12">
+            <label for="bannerUrl" class="form-label">Banner (URL)</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="bannerUrl" 
+              name="bannerUrl" 
+              placeholder="http://imagem.com/image.jpg" 
+              required>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <div class="col-6">
+            <label for="season" class="form-label">Temporada</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="season" 
+              name="season" 
+              placeholder="5" 
+              required>
+          </div>
+
+          <div class="col-6">
+            <label for="number" class="form-label">Numero</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="number" 
+              name="number" 
+              placeholder="18" 
+              required>
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <label for="videoUrl" class="form-label">Video (URL)</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="videoUrl" 
+            name="videoUrl" 
+            placeholder="http://video.com/video.m3u8" 
+            required>
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            <label for="videoStreamFormat" class="form-label">Stream Format</label>
+            <select 
+              class="form-select" 
+              id="videoStreamFormat" 
+              name="videoStreamFormat" 
+              required>
+              <option selected value="">Selecione uma opção</option>
+              @foreach (string format in streamFormats)
+              {
+                <option value="@format">@format</option>
+              }
+            </select>
+          </div>  
+
+          <div class="col-6">
+            <label for="videoDuration" class="form-label">Duração(segundos)</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="videoDuration" 
+              name="videoDuration" 
+              placeholder="3600" 
+              required>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
+      </div>
+    </form>
+  </div>
+</div>

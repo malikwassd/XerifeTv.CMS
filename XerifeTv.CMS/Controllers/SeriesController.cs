@@ -52,14 +52,14 @@ public class SeriesController(ISeriesService _service) : Controller
     return View();
   }
 
-  public async Task<IActionResult> CreateForm(CreateSeriesRequestDto dto)
+  public async Task<IActionResult> Create(CreateSeriesRequestDto dto)
   {
     await _service.Create(dto);
 
     return RedirectToAction("Index");
   }
 
-  public async Task<IActionResult> UpdateForm(UpdateSeriesRequestDto dto)
+  public async Task<IActionResult> Update(UpdateSeriesRequestDto dto)
   {
     await _service.Update(dto);
 
@@ -71,5 +71,19 @@ public class SeriesController(ISeriesService _service) : Controller
     if (id is not null) await _service.Delete(id);
 
     return RedirectToAction("Index");
+  }
+
+  public IActionResult Episodes(string? id)
+  {
+    ViewBag.SerieId = id;
+
+    return View();
+  }
+
+  public async Task<IActionResult> CreateEpisode(CreateEpisodeRequestDto dto)
+  {
+    await _service.CreateEpisode(dto);
+
+    return RedirectToAction("Episodes", new { id = dto.SerieId });
   }
 }
