@@ -27,6 +27,27 @@
     <hr />
   </header>
 
+  <div class="row mb-4 input-group input-group-sm">
+    <select 
+      class="form-select shadow-none" 
+      name="seasonFilter" 
+      id="seasonFilter" 
+      style="max-width: 20%">
+
+      @for (int i = 1; i <= ViewBag.NumberSeasons ?? 1; i++)
+      {
+        if (i == ViewBag.SeasonFilter)
+        {
+          <option value="@i" selected>@i ª Temporada</option>
+        }
+        else
+        {
+          <option value="@i">@i ª Temporada</option>
+        }
+      }
+    </select>
+  </div>
+
   <div class="row gap-2">
     @foreach (var episode in Model.Episodes)
     {
@@ -68,7 +89,19 @@
 
       @await Html.PartialAsync("_EpisodeFormModal", episode)
     }
+
+    @if (Model.Episodes.Count() == 0)
+    {
+      <p>Nenhum registro encontrado.</p>
+    }
   </div>
 
   @await Html.PartialAsync("_VideoModal")
 </div>
+
+@section scripts {
+  <script defer>
+    $('#seasonFilter').change(e =>
+      location.href = `/Series/Episodes/@Model.SerieId?seasonFilter=${e.target.value}`)
+  </script>
+}

@@ -73,13 +73,14 @@ public class SeriesController(ISeriesService _service) : Controller
     return RedirectToAction("Index");
   }
 
-  public async Task<IActionResult> Episodes(string? id)
+  public async Task<IActionResult> Episodes(string? id, int? seasonFilter)
   {
     if (id is null) return View(new GetEpisodesResponseDto());
 
     ViewBag.SerieId = id;
+    ViewBag.SeasonFilter = seasonFilter;
 
-    var response = await _service.GetEpisodesBySeason(id, 1);
+    var response = await _service.GetEpisodesBySeason(id, seasonFilter ?? 1);
 
     if (response.IsSuccess)
     {
