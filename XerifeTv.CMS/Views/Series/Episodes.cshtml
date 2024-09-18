@@ -50,6 +50,17 @@
               <a class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#episodeFormModal-@episode.Id">
                 <i class="fa-solid fa-pen-to-square"></i>
               </a>
+
+              <a 
+                class="btn btn-sm btn-secondary" 
+                data-bs-toggle="modal" 
+                data-bs-target="#videoModal"
+                data-bs-title="@episode.Title"
+                data-bs-banner="@episode.BannerUrl"
+                data-bs-video-url="@episode.Video?.Url"
+                data-bs-video-format="@episode.Video?.StreamFormat">
+                <i class="fa-solid fa-play"></i>
+              </a>
             </div>
           </div>
         </div>
@@ -58,4 +69,6 @@
       @await Html.PartialAsync("_EpisodeFormModal", episode)
     }
   </div>
+
+  @await Html.PartialAsync("_VideoModal")
 </div>
