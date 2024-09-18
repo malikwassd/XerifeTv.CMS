@@ -96,4 +96,11 @@ public class SeriesController(ISeriesService _service) : Controller
 
     return RedirectToAction("Episodes", new { id = dto.SerieId });
   }
+
+  public async Task<IActionResult> UpdateEpisode(UpdateEpisodeRequestDto dto)
+  {
+    await _service.UpdateEpisode(dto);
+
+    return RedirectToAction("Episodes", new { id = dto.SerieId });
+  }
 }

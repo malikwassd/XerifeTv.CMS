@@ -134,9 +134,9 @@ public class SeriesService(ISeriesRepository _repository) : ISeriesService
         return Result<GetEpisodesResponseDto>
           .Failure(new Error("404", "content not found"));
 
-      response.Episodes = response.Episodes
+      response.Episodes = [.. response.Episodes
         .Where(r => r.Season.Equals(season))
-        .ToList();
+        .OrderBy(r => r.Number)];
 
       var result = GetEpisodesResponseDto.FromEntity(response);
 
@@ -158,6 +158,35 @@ public class SeriesService(ISeriesRepository _repository) : ISeriesService
       if (response is null)
         return Result<string>.Failure(new Error("404", "content not found"));
 
+      response.Episodes.Add(dto.ToEntity());
+      await _repository.UpdateAsync(response);
+
+      return Result<string>.Success(response.Id);
+    }
+    catch (Exception ex)
+    {
+      var error = new Error("500", ex.InnerException?.Message ?? ex.Message);
+      return Result<string>.Failure(error);
+    }
+  }
+
+  public async Task<Result<string>> UpdateEpisode(UpdateEpisodeRequestDto dto)
+  {
+    try
+    {
+      var response = await _repository.GetAsync(dto.SerieId);
+
+      if (response is null)
+        return Result<string>.Failure(new Error("404", "content not found"));
+
+      var episode = response.Episodes
+        .Where(r => r.Id.Equals(dto.Id))
+        .FirstOrDefault();
+
+      if (episode is null)
+        return Result<string>.Failure(new Error("404", "episode not found"));
+
+      response.Episodes.Remove(episode);
       response.Episodes.Add(dto.ToEntity());
       await _repository.UpdateAsync(response);
 

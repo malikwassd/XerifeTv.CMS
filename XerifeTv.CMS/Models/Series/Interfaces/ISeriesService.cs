@@ -14,4 +14,5 @@ public interface ISeriesService
   Task<Result<PagedList<GetSeriesResponseDto>>> GetByFilter(GetSeriesByFilterRequestDto dto);
   Task<Result<GetEpisodesResponseDto>> GetEpisodesBySeason(string serieId, int season);
   Task<Result<string>> CreateEpisode(CreateEpisodeRequestDto dto);
+  Task<Result<string>> UpdateEpisode(UpdateEpisodeRequestDto dto);
 }
