@@ -81,7 +81,11 @@ public class SeriesController(ISeriesService _service) : Controller
 
     var response = await _service.GetEpisodesBySeason(id, 1);
 
-    if (response.IsSuccess) return View(response.Data);
+    if (response.IsSuccess)
+    {
+      ViewBag.NumberSeasons = response.Data?.NumberSeasons;
+      return View(response.Data);
+    }
 
     return View(new GetEpisodesResponseDto());
   }

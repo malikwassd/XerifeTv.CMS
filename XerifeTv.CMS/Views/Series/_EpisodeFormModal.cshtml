@@ -50,17 +50,21 @@
         <div class="row mb-2">
           <div class="col-6">
             <label for="season" class="form-label">Temporada</label>
-            <input 
-              type="text" 
-              class="form-control" 
+            <select 
+              class="form-select" 
               id="season" 
               name="season" 
-              placeholder="5" 
               required>
+              <option selected value="">Selecione uma opção</option>
+              @for (int i=1; i<ViewBag.NumberSeasons ?? 1; i++) 
+              {
+                <option value="@i">@i ª Temporada</option>
+              }
+            </select>
           </div>
 
           <div class="col-6">
-            <label for="number" class="form-label">Numero</label>
+            <label for="number" class="form-label">Episódio</label>
             <input 
               type="text" 
               class="form-control" 
