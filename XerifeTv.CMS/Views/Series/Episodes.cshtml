@@ -6,10 +6,11 @@
 
 @{
   ViewData["Title"] = "Séries";
+  var episodeEmpty = new Episode { Id = string.Empty };
 }
 
 <div class="container">
-  @await Html.PartialAsync("_EpisodeFormModal")
+  @await Html.PartialAsync("_EpisodeFormModal", episodeEmpty)
 
   <header>
     <div class="d-flex align-items-center justify-content-between gap-4">
@@ -19,7 +20,7 @@
         </a>
         <span class="fs-3 fw-normal">Episódios (@Model.SerieTitle)</span>
       </div>
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#episodeFormModal">
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#episodeFormModal-@episodeEmpty.Id">
         <i class="fa-solid fa-plus"></i> Cadastrar
       </button>
     </div>
@@ -45,10 +46,16 @@
                   Temporada @episode.Season | Episódio @episode.Number
                 </small>
               </p>
+
+              <a class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#episodeFormModal-@episode.Id">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </a>
             </div>
           </div>
         </div>
       </div>
+
+      @await Html.PartialAsync("_EpisodeFormModal", episode)
     }
   </div>
 </div>

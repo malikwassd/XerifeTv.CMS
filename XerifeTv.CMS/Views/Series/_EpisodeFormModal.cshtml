@@ -1,26 +1,72 @@
-﻿@{
+﻿@using XerifeTv.CMS.Models.Series;
+
+@model Episode?;
+
+@{
   string[] streamFormats = {"mp4", "hls", "dash", "m3u8", "rtmp", "mpeg-ts", "WebM"};
 }
 
 <div 
   class="modal fade" 
-  id="episodeFormModal" 
+  id="episodeFormModal-@Model?.Id" 
   data-bs-backdrop="static" 
   data-bs-keyboard="false" 
   tabindex="-1"
-  aria-labelledby="episodeFormModalLabel"
+  aria-labelledby="episodeFormModal-@Model?.Id-Label"
   aria-hidden="true">
 
   <div class="modal-dialog modal-lg modal-dialog-centered">
-    <form class="modal-content" asp-controller="Series" asp-action="CreateEpisode">
+    <form 
+      class="modal-content" 
+      asp-controller="Series"
+      asp-action="@(string.IsNullOrEmpty(Model?.Id) ? "CreateEpisode" : "UpdateEpisode")">
+
       <input type="hidden" name="serieId" value="@ViewBag.SerieId" />
-      <input type="hidden" name="id" value="" />
+      <input type="hidden" name="id" value="@Model?.Id" />
 
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="episodeFormModalLabel">Cadastrar Episódio</h1>
+        <h1 class="modal-title fs-5" id="episodeFormModal-@Model?.Id-Label">
+          @(string.IsNullOrEmpty(Model?.Id) ? "Cadastrar" : "Editar") Episódio
+        </h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+        <div class="row mb-2">
+          <div class="col-6">
+            <label for="season" class="form-label">Temporada</label>
+            <select 
+              class="form-select" 
+              id="season" 
+              name="season" 
+              required>
+              <option selected value="">Selecione uma opção</option>
+              @for (int i=1; i<ViewBag.NumberSeasons ?? 1; i++) 
+              {
+                if (i == Model?.Season)
+                {
+                  <option value="@i" selected>@i ª Temporada</option>
+                }
+                else
+                {
+                  <option value="@i">@i ª Temporada</option>
+                }
+              }
+            </select>
+          </div>
+
+          <div class="col-6">
+            <label for="number" class="form-label">Episódio</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="number" 
+              name="number" 
+              placeholder="18" 
+              value="@(Model?.Number > 0 ? Model?.Number : "")"
+              required>
+          </div>
+        </div>
+
         <div class="row mb-2">
           <div class="col-12">
             <label for="title" class="form-label">Titulo</label>
@@ -30,6 +76,7 @@
               id="title" 
               name="title" 
               placeholder="Digite aqui..." 
+              value="@Model?.Title"
               required>
           </div>
         </div>
@@ -43,34 +90,7 @@
               id="bannerUrl" 
               name="bannerUrl" 
               placeholder="http://imagem.com/image.jpg" 
-              required>
-          </div>
-        </div>
-
-        <div class="row mb-2">
-          <div class="col-6">
-            <label for="season" class="form-label">Temporada</label>
-            <select 
-              class="form-select" 
-              id="season" 
-              name="season" 
-              required>
-              <option selected value="">Selecione uma opção</option>
-              @for (int i=1; i<ViewBag.NumberSeasons ?? 1; i++) 
-              {
-                <option value="@i">@i ª Temporada</option>
-              }
-            </select>
-          </div>
-
-          <div class="col-6">
-            <label for="number" class="form-label">Episódio</label>
-            <input 
-              type="text" 
-              class="form-control" 
-              id="number" 
-              name="number" 
-              placeholder="18" 
+              value="@Model?.BannerUrl"
               required>
           </div>
         </div>
@@ -82,7 +102,8 @@
             class="form-control" 
             id="videoUrl" 
             name="videoUrl" 
-            placeholder="http://video.com/video.m3u8" 
+            placeholder="http://video.com/video.m3u8"
+            value="@Model?.Video?.Url"
             required>
         </div>
 
@@ -97,7 +118,14 @@
               <option selected value="">Selecione uma opção</option>
               @foreach (string format in streamFormats)
               {
-                <option value="@format">@format</option>
+                if (format == Model?.Video?.StreamFormat)
+                {
+                  <option value="@format" selected>@format</option>
+                }
+                else
+                {
+                  <option value="@format">@format</option>
+                }
               }
             </select>
           </div>  
@@ -110,12 +138,15 @@
               id="videoDuration" 
               name="videoDuration" 
               placeholder="3600" 
+              value="@Model?.Video?.Duration"
               required>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary">Cadastrar</button>
+        <button type="submit" class="btn btn-primary">
+          @(string.IsNullOrEmpty(Model?.Id) ? "Cadastrar" : "Editar")
+        </button>
       </div>
     </form>
   </div>

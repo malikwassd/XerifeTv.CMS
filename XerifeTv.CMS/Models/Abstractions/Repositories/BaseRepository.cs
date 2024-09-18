@@ -35,7 +35,6 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntit
 
   public virtual async Task<string> CreateAsync(T entity)
   {
-    entity.Id = Guid.NewGuid().ToString();
     await _collection.InsertOneAsync(entity);
     return entity.Id;
   }

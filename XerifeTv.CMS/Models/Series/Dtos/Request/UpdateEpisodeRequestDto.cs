@@ -2,8 +2,9 @@
 
 namespace XerifeTv.CMS.Models.Series.Dtos.Request;
 
-public class CreateEpisodeRequestDto
+public class UpdateEpisodeRequestDto
 {
+  public string Id { get; init; } = string.Empty;
   public string SerieId { get; init; } = string.Empty;
   public string Title { get; init; } = string.Empty;
   public string BannerUrl { get; init; } = string.Empty;
@@ -17,6 +18,7 @@ public class CreateEpisodeRequestDto
   {
     return new Episode
     {
+      Id = Id,
       Title = Title,
       BannerUrl = BannerUrl,
       Number = Number,
