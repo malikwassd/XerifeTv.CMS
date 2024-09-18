@@ -103,5 +103,8 @@
   <script defer>
     $('#seasonFilter').change(e =>
       location.href = `/Series/Episodes/@Model.SerieId?seasonFilter=${e.target.value}`)
+
+    $('#videoDuration').keyup(e => 
+      $('#videoDuration').val(convertHHmmToSeconds(e.target.value)))
   </script>
 }
