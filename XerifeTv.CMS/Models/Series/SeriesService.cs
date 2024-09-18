@@ -158,9 +158,10 @@ public class SeriesService(ISeriesRepository _repository) : ISeriesService
       if (response is null)
         return Result<string>.Failure(new Error("404", "content not found"));
 
-      var result = await _repository.CreateEpisodeAsync(dto.SerieId, dto.ToEntity());
+      response.Episodes.Add(dto.ToEntity());
+      await _repository.UpdateAsync(response);
 
-      return Result<string>.Success(result);
+      return Result<string>.Success(response.Id);
     }
     catch (Exception ex)
     {
