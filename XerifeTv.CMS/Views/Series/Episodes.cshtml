@@ -106,5 +106,10 @@
 
     $('#videoDuration').keyup(e => 
       $('#videoDuration').val(convertHHmmToSeconds(e.target.value)))
+
+    function remove(id) {
+      if (!confirm('Deseja realmento excluir o episódio?')) return;
+      location.href = `/Series/DeleteEpisode?serieId=@Model.SerieId&id=${id}`;
+    }
   </script>
 }

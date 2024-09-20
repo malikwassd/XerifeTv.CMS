@@ -198,4 +198,27 @@ public class SeriesService(ISeriesRepository _repository) : ISeriesService
       return Result<string>.Failure(error);
     }
   }
+
+  public async Task<Result<bool>> DeleteEpisode(string serieId, string id)
+  {
+    try
+    {
+      var response = await _repository.GetAsync(serieId);
+
+      if (response is null)
+        return Result<bool>.Failure(new Error("404", "serie not found"));
+
+      var episode = response.Episodes.Where(r => r.Id.Equals(id)).FirstOrDefault();
+      if (episode is not null) response.Episodes.Remove(episode);
+
+      await _repository.UpdateAsync(response);
+
+      return Result<bool>.Success(true);
+    }
+    catch (Exception ex)
+    {
+      var error = new Error("500", ex.InnerException?.Message ?? ex.Message);
+      return Result<bool>.Failure(error);
+    }
+  }
 }

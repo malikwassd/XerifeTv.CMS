@@ -104,4 +104,12 @@ public class SeriesController(ISeriesService _service) : Controller
 
     return RedirectToAction("Episodes", new { id = dto.SerieId });
   }
+
+  public async Task<IActionResult> DeleteEpisode(string? serieId, string? id)
+  {
+    if (serieId is not null && id is not null)
+      await _service.DeleteEpisode(serieId, id);
+
+    return RedirectToAction("Episodes", new { id = serieId });
+  }
 }

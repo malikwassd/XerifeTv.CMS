@@ -15,4 +15,5 @@ public interface ISeriesService
   Task<Result<GetEpisodesResponseDto>> GetEpisodesBySeason(string serieId, int season);
   Task<Result<string>> CreateEpisode(CreateEpisodeRequestDto dto);
   Task<Result<string>> UpdateEpisode(UpdateEpisodeRequestDto dto);
+  Task<Result<bool>> DeleteEpisode(string serieId, string id);
 }
