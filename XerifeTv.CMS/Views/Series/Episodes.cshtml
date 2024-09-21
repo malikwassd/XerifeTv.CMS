@@ -10,6 +10,7 @@
 }
 
 <div class="container">
+  @await Html.PartialAsync("_VideoModal")
   @await Html.PartialAsync("_EpisodeFormModal", episodeEmpty)
 
   <header>
@@ -95,8 +96,6 @@
       <p>Nenhum registro encontrado.</p>
     }
   </div>
-
-  @await Html.PartialAsync("_VideoModal")
 </div>
 
 @section scripts {
