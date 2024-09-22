@@ -28,6 +28,7 @@
 
 <script defer>
   const modal = document.getElementById('videoModal')
+  var player = undefined
 
   if (modal) {
     modal.addEventListener('show.bs.modal', event => {
@@ -36,7 +37,7 @@
       const modalTitle = document.querySelector('.modal-title')
       modalTitle.textContent = button.getAttribute('data-bs-title')
 
-      const player = videojs('player', {
+      player = videojs('player', {
         controls: true,
         preload: 'auto'
       })
@@ -49,6 +50,10 @@
         src: button.getAttribute('data-bs-video-url'),
         type: streamFormat
       })
+    })
+
+    modal.addEventListener('hide.bs.modal', event => {
+      if (player) player.pause()
     })
   }
 </script>
