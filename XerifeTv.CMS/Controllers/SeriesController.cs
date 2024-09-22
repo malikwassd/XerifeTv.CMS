@@ -75,7 +75,7 @@ public class SeriesController(ISeriesService _service) : Controller
 
   public async Task<IActionResult> Episodes(string? id, int? seasonFilter)
   {
-    if (id is null) return View(new GetEpisodesResponseDto());
+    if (id is null) return RedirectToAction("Index");
 
     ViewBag.SerieId = id;
     ViewBag.SeasonFilter = seasonFilter;
@@ -88,7 +88,7 @@ public class SeriesController(ISeriesService _service) : Controller
       return View(response.Data);
     }
 
-    return View(new GetEpisodesResponseDto());
+    return RedirectToAction("Index");
   }
 
   public async Task<IActionResult> CreateEpisode(CreateEpisodeRequestDto dto)
