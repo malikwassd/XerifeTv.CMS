@@ -30,6 +30,7 @@ public static class ServicesConfig
   {
     services.AddScoped<IMovieService, MovieSevice>();
     services.AddScoped<ISeriesService, SeriesService>();
+    services.AddScoped<IChannelService, ChannelService>();
     return services;
   }
 }
