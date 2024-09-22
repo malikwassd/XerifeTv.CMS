@@ -1,5 +1,14 @@
-﻿@{
+﻿@using XerifeTv.CMS.Models.Channel.Dtos.Response;
+@using XerifeTv.CMS.Models.Channel.Enums;
+
+@model IEnumerable<GetChannelResponseDto>;
+
+@{
   ViewData["Title"] = "Canais";
+
+  ICollection<string[]> filters = [];
+  filters.Add([EChannelSearchFilter.TITLE.ToString().ToLower(), "Titulo"]);
+  filters.Add([EChannelSearchFilter.CATEGORY.ToString().ToLower(), "Categoria"]);
 }
 
 <div class="container">
@@ -12,4 +21,139 @@
     </div>
     <hr />
   </header>
+
+  <div class="row mb-3 justify-content-between">
+    <a class="col-1 fs-5" role="button" asp-controller="Channels" asp-action="Index">
+      <i class="fa-solid fa-rotate"></i>
+    </a>
+
+    <div class="col-5">
+      <form 
+        class="input-group input-group-sm" 
+        asp-controller="Channels" 
+        asp-action="Index" 
+        method="get">
+
+        <input 
+          type="hidden" 
+          name="currentPage" 
+          value="@(ViewBag.Filter is not null ? ViewBag.CurrentPage : 1)"/>
+
+        <select class="form-select shadow-none" name="filter">
+          @foreach (var filter in filters)
+          {
+            if (filter[0].Equals(ViewBag.Filter))
+            {
+              <option value="@filter[0]" selected>@filter[1]</option>
+            }
+            else
+            {
+              <option value="@filter[0]">@filter[1]</option>   
+            }
+          }
+        </select>
+
+        <input 
+          type="text" 
+          name="search" 
+          class="form-control shadow-none" 
+          value="@ViewBag.Search"
+          required>
+        <button class="btn btn-success shadow-none" type="submit">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  @await Html.PartialAsync("_VideoModal")
+
+  <div class="row gap-3">
+    @foreach (var Channel in Model)
+    {
+      <div class="card col-2 pt-1">
+        <img src="@Channel.LogoUrl" class="card-img-top" alt="@Channel.Title" loading="lazy" style="height: 9rem;">
+        <div class="card-body">
+          <h5 class="card-title text-nowrap overflow-hidden text-truncate">@Channel.Title</h5>
+          <p class="card-text">@Channel.Category</p>
+
+          <div class="d-flex gap-1">
+            <a 
+              class="btn btn-sm btn-primary" 
+              asp-controller="Channels" 
+              asp-action="Form" 
+              asp-route-id="@Channel.Id">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+            <a 
+              class="btn btn-sm btn-secondary" 
+              data-bs-toggle="modal" 
+              data-bs-target="#videoModal"
+              data-bs-title="@Channel.Title"
+              data-bs-banner="@Channel.LogoUrl"
+              data-bs-video-url="@Channel.Video?.Url"
+              data-bs-video-format="@Channel.Video?.StreamFormat">
+              <i class="fa-solid fa-play"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (Model?.Count() <= 0)
+    {
+      <p>Nenhum registro encontrado.</p>
+    }
+  </div>
+
+  @if (ViewBag.TotalPages > 1)
+  {
+    <nav class="mt-5">
+      <ul class="pagination justify-content-center">
+        <li class="page-item @(!ViewBag.HasPrevPage ? "disabled" : "")">
+          <a 
+            class="page-link" 
+            aria-label="Previous" 
+            role="button"
+            asp-controller="Channels"
+            asp-action="Index"
+            asp-route-currentPage="@(ViewBag.CurrentPage - 1)"
+            asp-route-filter="@ViewBag.Filter"
+            asp-route-search="@ViewBag.Search">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+           <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+              <a 
+                class="page-link" 
+                asp-controller="Channels" 
+                asp-action="Index" 
+                asp-route-currentPage="@i"
+                asp-route-filter="@ViewBag.Filter"
+                asp-route-search="@ViewBag.Search">
+                @i
+               </a>
+           </li>  
+        }
+
+        <li class="page-item @(!ViewBag.HasNextPage ? "disabled" : "")">
+          <a 
+            class="page-link" 
+            aria-label="Next" 
+            role="button"
+            asp-controller="Channels"
+            asp-action="Index"
+            asp-route-currentPage="@(ViewBag.CurrentPage + 1)"
+            asp-route-filter="@ViewBag.Filter"
+            asp-route-search="@ViewBag.Search">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  }
 </div>
