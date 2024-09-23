@@ -47,4 +47,7 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntit
 
   public virtual async Task DeleteAsync(string id)
     => await _collection.DeleteOneAsync(r => r.Id == id);
+
+  public async Task<long> CountAsync() 
+    => await _collection.CountDocumentsAsync(_ => true);
 }

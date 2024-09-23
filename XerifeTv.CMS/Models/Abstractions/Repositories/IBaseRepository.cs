@@ -9,4 +9,5 @@ public interface IBaseRepository<T> where T : BaseEntity
   Task<string> CreateAsync(T entity);
   Task UpdateAsync(T entity);
   Task DeleteAsync(string id);
+  Task<long> CountAsync();
 }
