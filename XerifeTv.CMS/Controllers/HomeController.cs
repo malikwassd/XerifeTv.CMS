@@ -1,13 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
+using XerifeTv.CMS.Models.Dashboard.Dtos.Response;
+using XerifeTv.CMS.Models.Dashboard.Interfaces;
 
 namespace XerifeTv.CMS.Controllers;
 
-public class HomeController(ILogger<HomeController> _logger) : Controller
+public class HomeController(IDashboardService _service) : Controller
 {
-  public IActionResult Index()
+  public async Task<IActionResult> Index()
   {
-    _logger.Log(LogLevel.Information, "home index page");
+    var response = await _service.Get();
 
-    return View();
+    if (response.IsSuccess) return View(response.Data);
+
+    return View(new GetDashboardDataRequestDto(0, 0, 0));
   }
 }

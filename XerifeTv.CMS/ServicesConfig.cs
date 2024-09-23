@@ -1,5 +1,7 @@
 ﻿using XerifeTv.CMS.Models.Channel;
 using XerifeTv.CMS.Models.Channel.Interfaces;
+using XerifeTv.CMS.Models.Dashboard;
+using XerifeTv.CMS.Models.Dashboard.Interfaces;
 using XerifeTv.CMS.Models.Movie;
 using XerifeTv.CMS.Models.Movie.Interfaces;
 using XerifeTv.CMS.Models.Series;
@@ -31,6 +33,7 @@ public static class ServicesConfig
     services.AddScoped<IMovieService, MovieSevice>();
     services.AddScoped<ISeriesService, SeriesService>();
     services.AddScoped<IChannelService, ChannelService>();
+    services.AddScoped<IDashboardService, DashboardService>();
     return services;
   }
 }

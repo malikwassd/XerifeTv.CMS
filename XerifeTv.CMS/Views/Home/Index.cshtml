@@ -1,7 +1,13 @@
-﻿@{
+﻿@using XerifeTv.CMS.Models.Dashboard.Dtos.Response;
+
+@model GetDashboardDataRequestDto;
+
+@{
   ViewData["Title"] = "Dashboard";
 }
 
 <div class="text-center">
-  <h1 class="display-4">Dashboard</h1>
+  <h1 class="display-4">@Model.NumberOfMovies</h1>
+  <h1 class="display-4">@Model.NumberOfSeries</h1>
+  <h1 class="display-4">@Model.NumberOfChannels</h1>
 </div>
