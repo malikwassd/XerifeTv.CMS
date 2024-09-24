@@ -6,8 +6,83 @@
   ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-  <h1 class="display-4">@Model.NumberOfMovies</h1>
-  <h1 class="display-4">@Model.NumberOfSeries</h1>
-  <h1 class="display-4">@Model.NumberOfChannels</h1>
+<div class="container">
+  <header>
+    <div class="d-flex align-items-center justify-content-between gap-4">
+      <span class="fs-3 fw-normal">Dashboard</span>
+    </div>
+    <hr />
+  </header>
+
+  <div class="row gap-4">
+    <div class="col-3 card-dashboard bg-success text-light py-3">
+      <div class="d-flex justify-content-between align-items-center px-3">
+        <i class="fa-solid fa-clapperboard display-5"></i>
+        <span class="display-5 fw-bold">@Model.NumberOfMovies</span>
+      </div>
+      <div class="w-full px-3 d-flex justify-content-between align-items-center">
+        <span class="fs-4">Qtde. Filmes</span>
+        <a class="text-light fs-5" asp-controller="Movies" asp-action="Form">
+          <i class="fa-solid fa-plus"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="col-3 card-dashboard bg-primary text-light py-3">
+      <div class="d-flex justify-content-between align-items-center px-3">
+        <i class="fa-solid fa-photo-film display-5"></i>
+        <span class="display-5 fw-bold">@Model.NumberOfSeries</span>
+      </div>
+      <div class="w-full px-3 d-flex justify-content-between align-items-center">
+        <span class="fs-4">Qtde. Séries</span>
+        <a class="text-light fs-5" asp-controller="Series" asp-action="Form">
+          <i class="fa-solid fa-plus"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="col-3 card-dashboard bg-dark text-light py-3">
+      <div class="d-flex justify-content-between align-items-center px-3">
+        <i class="fa-solid fa-satellite-dish display-5"></i>
+        <span class="display-5 fw-bold">@Model.NumberOfChannels</span>
+      </div>
+      <div class="w-full px-3 d-flex justify-content-between align-items-center">
+        <span class="fs-4">Qtde. Canais</span>
+        <a class="text-light fs-5" asp-controller="Channels" asp-action="Form">
+          <i class="fa-solid fa-plus"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full" style="height: 60vh;">
+    <canvas class="mt-5 w-full h-full" id="chart"></canvas>
+  </div>
+
 </div>
+
+@section scripts {
+  <script>
+    var ctx = document.getElementById('chart').getContext('2d');
+
+    var chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Filmes', 'Séries', 'Canais'],
+        datasets: [{
+          label: 'Qtde. Conteúdos',
+          data: [
+            @Model.NumberOfMovies, 
+            @Model.NumberOfSeries, 
+            @Model.NumberOfChannels
+          ],
+          backgroundColor: [
+            '#0d8d3799',
+            '#2b60a3b8',
+            '#000000b8',
+          ]
+        }]
+      },  
+    });
+  </script>
+}
