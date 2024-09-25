@@ -69,16 +69,19 @@ public sealed class SeriesRepository(IOptions<DBSettings> options)
   public async Task<SeriesEntity?> GetEpisodesBySeasonAsync(string serieId, int season)
   {
     var filter = Builders<SeriesEntity>.Filter.Eq(r => r.Id, serieId);
-    
-    var projection = Builders<SeriesEntity>.Projection
-      .Include(r => r.Title)
-      .Include(r => r.NumberSeasons)
-      .Include(r => r.Episodes)
-      .ElemMatch(r => r.Episodes, e => e.Season.Equals(season));
+    var projection = Builders<SeriesEntity>.Projection.Expression(
+      r => new SeriesEntity 
+      {
+        Id = r.Id,
+        Title = r.Title,
+        NumberSeasons = r.NumberSeasons,
+        Episodes = r.Episodes.Where(e => e.Season == season).OrderBy(e => e.Number).ToList()
+      }
+    );
     
     var response = await _collection
       .Find(filter)
-      .Project<SeriesEntity>(projection)
+      .Project(projection)
       .FirstOrDefaultAsync();
 
     return response;
@@ -116,7 +119,6 @@ public sealed class SeriesRepository(IOptions<DBSettings> options)
   public async Task UpdateEpisodeAsync(string serieId, Episode episode)
   {
     var exist = await DeleteEpisodeAsync(serieId, episode.Id);
-
     if (!exist) return;
 
     await CreateEpisodeAsync(serieId, episode);
@@ -127,7 +129,8 @@ public sealed class SeriesRepository(IOptions<DBSettings> options)
     var filter = Builders<SeriesEntity>.Filter.Eq(r => r.Id, serieId);
 
     var update = Builders<SeriesEntity>.Update.PullFilter(
-      r => r.Episodes, e => e.Id == episodeId);
+      r => r.Episodes, 
+      e => e.Id == episodeId);
 
     var response = await _collection.UpdateOneAsync(filter, update);
 
