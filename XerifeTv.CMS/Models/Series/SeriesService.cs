@@ -73,8 +73,6 @@ public class SeriesService(ISeriesRepository _repository) : ISeriesService
       if (response is null)
         return Result<string>.Failure(new Error("404", "content not found"));
 
-      entity.CreateAt = response.CreateAt;
-      entity.Episodes = response.Episodes;
       await _repository.UpdateAsync(entity);
       return Result<string>.Success(entity.Id);
     }
@@ -128,18 +126,14 @@ public class SeriesService(ISeriesRepository _repository) : ISeriesService
   {
     try
     {
-      var response = await _repository.GetAsync(serieId);
+      var response = await _repository.GetEpisodesBySeasonAsync(serieId, season);
 
       if (response is null)
         return Result<GetEpisodesResponseDto>
           .Failure(new Error("404", "content not found"));
 
-      response.Episodes = [.. response.Episodes
-        .Where(r => r.Season.Equals(season))
-        .OrderBy(r => r.Number)];
-
       var result = GetEpisodesResponseDto.FromEntity(response);
-
+      
       return Result<GetEpisodesResponseDto>.Success(result);
     }
     catch (Exception ex)

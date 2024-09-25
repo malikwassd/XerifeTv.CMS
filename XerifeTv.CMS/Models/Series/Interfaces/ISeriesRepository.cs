@@ -7,4 +7,5 @@ namespace XerifeTv.CMS.Models.Series.Interfaces;
 public interface ISeriesRepository : IBaseRepository<SeriesEntity>
 {
   Task<PagedList<SeriesEntity>> GetByFilterAsync(GetSeriesByFilterRequestDto dto);
+  Task<SeriesEntity?> GetEpisodesBySeasonAsync(string serieId, int season);
 }
