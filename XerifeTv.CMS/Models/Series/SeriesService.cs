@@ -152,10 +152,9 @@ public class SeriesService(ISeriesRepository _repository) : ISeriesService
       if (response is null)
         return Result<string>.Failure(new Error("404", "content not found"));
 
-      response.Episodes.Add(dto.ToEntity());
-      await _repository.UpdateAsync(response);
+      await _repository.CreateEpisodeAsync(response.Id, dto.ToEntity());
 
-      return Result<string>.Success(response.Id);
+      return Result<string>.Success(dto.ToEntity().Id);
     }
     catch (Exception ex)
     {
@@ -173,16 +172,7 @@ public class SeriesService(ISeriesRepository _repository) : ISeriesService
       if (response is null)
         return Result<string>.Failure(new Error("404", "content not found"));
 
-      var episode = response.Episodes
-        .Where(r => r.Id.Equals(dto.Id))
-        .FirstOrDefault();
-
-      if (episode is null)
-        return Result<string>.Failure(new Error("404", "episode not found"));
-
-      response.Episodes.Remove(episode);
-      response.Episodes.Add(dto.ToEntity());
-      await _repository.UpdateAsync(response);
+      await _repository.UpdateEpisodeAsync(response.Id, dto.ToEntity());
 
       return Result<string>.Success(response.Id);
     }
@@ -202,10 +192,7 @@ public class SeriesService(ISeriesRepository _repository) : ISeriesService
       if (response is null)
         return Result<bool>.Failure(new Error("404", "serie not found"));
 
-      var episode = response.Episodes.Where(r => r.Id.Equals(id)).FirstOrDefault();
-      if (episode is not null) response.Episodes.Remove(episode);
-
-      await _repository.UpdateAsync(response);
+      await _repository.DeleteEpisodeAsync(serieId, id);
 
       return Result<bool>.Success(true);
     }

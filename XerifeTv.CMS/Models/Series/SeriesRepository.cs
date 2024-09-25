@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using MongoDB.Driver.Core.Servers;
 using System.Linq.Expressions;
 using XerifeTv.CMS.Models.Abstractions;
 using XerifeTv.CMS.Models.Abstractions.Repositories;
@@ -75,7 +74,7 @@ public sealed class SeriesRepository(IOptions<DBSettings> options)
       .Include(r => r.Title)
       .Include(r => r.NumberSeasons)
       .Include(r => r.Episodes)
-      .ElemMatch(r => r.Episodes, e => e.Season == season);
+      .ElemMatch(r => r.Episodes, e => e.Season.Equals(season));
     
     var response = await _collection
       .Find(filter)
@@ -102,5 +101,36 @@ public sealed class SeriesRepository(IOptions<DBSettings> options)
       .Set(r => r.UpdateAt, DateTime.UtcNow);
 
     await _collection.UpdateOneAsync(filter, update);
+  }
+
+  public async Task<string> CreateEpisodeAsync(string serieId, Episode episode)
+  {
+    var filter = Builders<SeriesEntity>.Filter.Eq(r => r.Id, serieId);
+    var update = Builders<SeriesEntity>.Update.Push(r => r.Episodes, episode);
+
+    await _collection.UpdateOneAsync(filter, update);
+
+    return episode.Id;
+  }
+
+  public async Task UpdateEpisodeAsync(string serieId, Episode episode)
+  {
+    var exist = await DeleteEpisodeAsync(serieId, episode.Id);
+
+    if (!exist) return;
+
+    await CreateEpisodeAsync(serieId, episode);
+  }
+
+  public async Task<bool> DeleteEpisodeAsync(string serieId, string episodeId)
+  {
+    var filter = Builders<SeriesEntity>.Filter.Eq(r => r.Id, serieId);
+
+    var update = Builders<SeriesEntity>.Update.PullFilter(
+      r => r.Episodes, e => e.Id == episodeId);
+
+    var response = await _collection.UpdateOneAsync(filter, update);
+
+    return response.ModifiedCount > 0;
   }
 }
