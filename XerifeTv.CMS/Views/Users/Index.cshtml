@@ -7,7 +7,7 @@
 }
 
 <div class="container">
-  @await Html.PartialAsync("_UserFormModal");
+  @await Html.PartialAsync("_UserFormModal")
 
   <header>
     <div class="d-flex align-items-center justify-content-between gap-4">
@@ -29,12 +29,25 @@
           </div>
           <div class="card-body d-flex justify-content-between align-items-center">
             <span class="card-text">@user.RoleName</span>
-            <a href="#" class="btn btn-danger btn-sm">
-              <i class="fa-solid fa-trash"></i>
-            </a>
+            
+            @if (Model.Count() > 1)
+            {
+              <a role="button" class="btn btn-danger btn-sm" onclick="deleteUser('@user.Id')">
+                <i class="fa-solid fa-trash"></i>
+              </a>
+            }
           </div>
         </div>
       </div>
     }
   </div>
 </div>
+
+@section scripts {
+  <script defer>
+    function deleteUser(id) {
+      if (!confirm('Deseja realmente remover o usuário?')) return;
+      location.href = `/Users/Delete/${id}`
+    }
+  </script>
+}

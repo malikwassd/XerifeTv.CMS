@@ -27,4 +27,10 @@ public class UsersController(IUserService _service) : Controller
     await _service.Register(dto);
     return RedirectToAction("Index");
   }
+
+  public async Task<IActionResult> Delete(string id)
+  {
+    await _service.Delete(id);
+    return RedirectToAction("Index");
+  }
 }
