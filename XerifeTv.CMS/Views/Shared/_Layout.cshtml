@@ -31,27 +31,31 @@
 <body>
   <div class="container-fluid">
     <div class="row flex-nowrap">
-      <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
-        <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-          <a href="/" class="d-flex align-items-center py-3 mb-md-0 me-md-auto text-white text-decoration-none">
-            <img class="w-75 d-none d-md-block" src="~/assets/logo.png" alt="Xerife.TV CMS" />
-          </a>
-          <ul class="nav nav-pills flex-column mb-sm-auto mb-0 mt-3 align-items-center align-items-sm-start" id="menu">
-            @foreach (var pageView in pagesView)
-            {
-              <li class="nav-item py-2">
-                <a 
-                  class="nav-link px-0 align-middle fs-5 @(ViewData["Title"]?.ToString() == pageView[2] ? "text-info" : "text-light")" 
-                  asp-controller="@pageView[0]" 
-                  asp-action="@pageView[1]">
-                  <i class="@pageView[3]"></i> <span class="ms-1 d-none d-sm-inline">@pageView[2]</span>
-                </a>
-              </li>
-            }
-          </ul>
-          <hr>
+
+      @if (ViewData["title"]?.ToString() != "SignIn")
+      {
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+          <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+            <a href="/" class="d-flex align-items-center py-3 mb-md-0 me-md-auto text-white text-decoration-none">
+              <img class="w-75 d-none d-md-block" src="~/assets/logo.png" alt="Xerife.TV CMS" />
+            </a>
+            <ul class="nav nav-pills flex-column mb-sm-auto mb-0 mt-3 align-items-center align-items-sm-start" id="menu">
+              @foreach (var pageView in pagesView)
+              {
+                <li class="nav-item py-2">
+                  <a class="nav-link px-0 align-middle fs-5 @(ViewData["Title"]?.ToString() == pageView[2] ? "text-info" : "text-light")"
+                     asp-controller="@pageView[0]"
+                     asp-action="@pageView[1]">
+                    <i class="@pageView[3]"></i> <span class="ms-1 d-none d-sm-inline">@pageView[2]</span>
+                  </a>
+                </li>
+              }
+            </ul>
+            <hr>
+          </div>
         </div>
-      </div>
+      }
+     
       <div class="col py-3" style="max-height:95vh; overflow:auto;">
         @RenderBody()
       </div>

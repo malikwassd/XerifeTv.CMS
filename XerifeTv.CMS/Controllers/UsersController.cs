@@ -17,10 +17,7 @@ public class UsersController(IUserService _service) : Controller
     return View(Enumerable.Empty<GetUserRequestDto>());
   }
 
-  public IActionResult Login()
-  {
-    return View();
-  }
+  public IActionResult SignIn() => View();
 
   public async Task<IActionResult> Register(RegisterUserRequestDto dto)
   {
