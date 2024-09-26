@@ -4,5 +4,6 @@ public enum ECollection
 {
   MOVIES,
   SERIES,
-  CHANNELS
+  CHANNELS,
+  USERS
 }
