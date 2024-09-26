@@ -2,4 +2,7 @@
 
 namespace XerifeTv.CMS.Models.User.Interfaces;
 
-public interface IUserRepository : IBaseRepository<UserEntity>;
+public interface IUserRepository : IBaseRepository<UserEntity>
+{
+  Task<UserEntity?> GetByUserNameAsync(string userName);
+}

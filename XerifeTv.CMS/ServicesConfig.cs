@@ -6,6 +6,8 @@ using XerifeTv.CMS.Models.Movie;
 using XerifeTv.CMS.Models.Movie.Interfaces;
 using XerifeTv.CMS.Models.Series;
 using XerifeTv.CMS.Models.Series.Interfaces;
+using XerifeTv.CMS.Models.User;
+using XerifeTv.CMS.Models.User.Interfaces;
 
 namespace XerifeTv.CMS;
 
@@ -25,6 +27,7 @@ public static class ServicesConfig
     services.AddScoped<IMovieRepository, MovieRepository>();
     services.AddScoped<ISeriesRepository, SeriesRepository>();
     services.AddScoped<IChannelRepository, ChannelRepository>();
+    services.AddScoped<IUserRepository, UserRepository>();
     return services;
   }
 
@@ -34,6 +37,7 @@ public static class ServicesConfig
     services.AddScoped<ISeriesService, SeriesService>();
     services.AddScoped<IChannelService, ChannelService>();
     services.AddScoped<IDashboardService, DashboardService>();
+    services.AddScoped<IUserService, UserService>();
     return services;
   }
 }
