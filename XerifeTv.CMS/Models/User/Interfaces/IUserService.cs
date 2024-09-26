@@ -8,4 +8,6 @@ public interface IUserService
 {
   Task<Result<string>> Register(RegisterUserRequestDto dto);
   Task<Result<LoginUserResponseDto>> Login(LoginUserRequestDto dto);
+  Task<Result<PagedList<GetUserRequestDto>>> Get(int currentPage, int limit);
+  Task<Result<bool>> Delete(string id);
 }
