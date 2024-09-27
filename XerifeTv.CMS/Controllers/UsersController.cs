@@ -19,6 +19,13 @@ public class UsersController(IUserService _service) : Controller
 
   public IActionResult SignIn() => View();
 
+  [HttpPost]
+  public async Task<IActionResult> SignIn(LoginUserRequestDto dto)
+  {
+    var response = await _service.Login(dto);
+    return View();
+  }
+
   public async Task<IActionResult> Register(RegisterUserRequestDto dto)
   {
     await _service.Register(dto);
