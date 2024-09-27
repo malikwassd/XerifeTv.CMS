@@ -6,7 +6,7 @@ using XerifeTv.CMS.Models.User.Interfaces;
 
 namespace XerifeTv.CMS.Models.User;
 
-public class UserService(IUserRepository _repository) : IUserService
+public class UserService(IUserRepository _repository, ITokenService _tokenService) : IUserService
 {
   public async Task<Result<PagedList<GetUserRequestDto>>> Get(int currentPage, int limit)
   {
@@ -60,7 +60,7 @@ public class UserService(IUserRepository _repository) : IUserService
           new Error("401", "unauthorized"));
 
       return Result<LoginUserResponseDto>.Success(
-        new LoginUserResponseDto("token aqui..."));
+        new LoginUserResponseDto(_tokenService.GenerateToken(response)));
     }
     catch (Exception ex)
     {

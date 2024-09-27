@@ -8,7 +8,8 @@ public class HashPassword
   private const int keySize = 55;
   private const int interations = 450000;
   private static readonly HashAlgorithmName hashAlgorithm = HashAlgorithmName.SHA256;
-  private static readonly byte[] salt = Encoding.ASCII.GetBytes("HASHCODINGHASHSHSHSH");
+  private static readonly byte[] salt = Encoding.UTF8.GetBytes(
+    Environment.GetEnvironmentVariable("SaltHash") ?? string.Empty);
 
   public static string Encrypt(string password)
   {

@@ -38,6 +38,7 @@ public static class ServicesConfig
     services.AddScoped<IChannelService, ChannelService>();
     services.AddScoped<IDashboardService, DashboardService>();
     services.AddScoped<IUserService, UserService>();
+    services.AddScoped<ITokenService, TokenService>();
     return services;
   }
 }
