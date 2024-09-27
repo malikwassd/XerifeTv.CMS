@@ -6,7 +6,10 @@ using XerifeTv.CMS.Models.User.Interfaces;
 
 namespace XerifeTv.CMS.Models.User;
 
-public class UserService(IUserRepository _repository, ITokenService _tokenService) : IUserService
+public class UserService(
+  IUserRepository _repository, 
+  ITokenService _tokenService,
+  IConfiguration _configuration) : IUserService
 {
   public async Task<Result<PagedList<GetUserRequestDto>>> Get(int currentPage, int limit)
   {
@@ -33,7 +36,8 @@ public class UserService(IUserRepository _repository, ITokenService _tokenServic
     try
     {
       var entity = dto.ToEntity();
-      entity.Password = HashPassword.Encrypt(dto.Password);
+
+      entity.Password = new HashPassword(_configuration).Encrypt(dto.Password);
 
       var response = await _repository.CreateAsync(entity);
       return Result<string>.Success(response);
@@ -55,7 +59,10 @@ public class UserService(IUserRepository _repository, ITokenService _tokenServic
         return Result<LoginUserResponseDto>.Failure(
           new Error("404", "user not found"));
 
-      if (!HashPassword.Verify(dto.Password, response.Password))
+      var isPasswordCorrect =
+        new HashPassword(_configuration).Verify(dto.Password, response.Password);
+
+      if (!isPasswordCorrect)
         return Result<LoginUserResponseDto>.Failure(
           new Error("401", "unauthorized"));
 
