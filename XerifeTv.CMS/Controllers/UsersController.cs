@@ -52,6 +52,13 @@ public class UsersController(IUserService _service) : Controller
     return RedirectToAction("Index", "Home");
   }
 
+  [AllowAnonymous]
+  public IActionResult Logout()
+  {
+    Response.Cookies.Delete("token");
+    return RedirectToAction("Index", "Home");
+  }
+
   public async Task<IActionResult> Register(RegisterUserRequestDto dto)
   {
     await _service.Register(dto);
