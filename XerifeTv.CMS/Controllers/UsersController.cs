@@ -70,4 +70,7 @@ public class UsersController(IUserService _service) : Controller
     await _service.Delete(id);
     return RedirectToAction("Index");
   }
+
+  [AllowAnonymous]
+  public IActionResult UserUnauthorized() => View();
 }

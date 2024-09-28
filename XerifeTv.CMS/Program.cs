@@ -16,6 +16,19 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment()) app.UseHsts();
 
+app.UseStatusCodePages(context =>
+{
+  var response = context.HttpContext.Response;
+
+  if (response.StatusCode == 401)
+    response.Redirect("/Users/SignIn");
+  
+  if (response.StatusCode == 403)
+    response.Redirect("/Users/UserUnauthorized");
+
+  return Task.CompletedTask;
+});
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
