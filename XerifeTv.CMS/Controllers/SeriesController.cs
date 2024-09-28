@@ -43,6 +43,7 @@ public class SeriesController(ISeriesService _service) : Controller
     return View(Enumerable.Empty<GetSeriesResponseDto>());
   }
 
+  [Authorize(Roles = "admin, common")]
   public async Task<IActionResult> Form(string? id)
   {
     if (id is not null)
@@ -54,6 +55,7 @@ public class SeriesController(ISeriesService _service) : Controller
     return View();
   }
 
+  [Authorize(Roles = "admin, common")]
   public async Task<IActionResult> Create(CreateSeriesRequestDto dto)
   {
     await _service.Create(dto);
@@ -61,6 +63,7 @@ public class SeriesController(ISeriesService _service) : Controller
     return RedirectToAction("Index");
   }
 
+  [Authorize(Roles = "admin, common")]
   public async Task<IActionResult> Update(UpdateSeriesRequestDto dto)
   {
     await _service.Update(dto);
@@ -68,6 +71,7 @@ public class SeriesController(ISeriesService _service) : Controller
     return RedirectToAction("Index");
   }
 
+  [Authorize(Roles = "admin, common")]
   public async Task<IActionResult> Delete(string? id)
   {
     if (id is not null) await _service.Delete(id);
@@ -93,6 +97,7 @@ public class SeriesController(ISeriesService _service) : Controller
     return RedirectToAction("Index");
   }
 
+  [Authorize(Roles = "admin, common")]
   public async Task<IActionResult> CreateEpisode(CreateEpisodeRequestDto dto)
   {
     await _service.CreateEpisode(dto);
@@ -100,6 +105,7 @@ public class SeriesController(ISeriesService _service) : Controller
     return RedirectToAction("Episodes", new { id = dto.SerieId });
   }
 
+  [Authorize(Roles = "admin, common")]
   public async Task<IActionResult> UpdateEpisode(UpdateEpisodeRequestDto dto)
   {
     await _service.UpdateEpisode(dto);
@@ -107,6 +113,7 @@ public class SeriesController(ISeriesService _service) : Controller
     return RedirectToAction("Episodes", new { id = dto.SerieId });
   }
 
+  [Authorize(Roles = "admin, common")]
   public async Task<IActionResult> DeleteEpisode(string? serieId, string? id)
   {
     if (serieId is not null && id is not null)
