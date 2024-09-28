@@ -15,9 +15,13 @@
   <header>
     <div class="d-flex align-items-center justify-content-between gap-4">
       <span class="fs-3 fw-normal">Canais</span>
-      <a class="btn btn-primary" asp-controller="Channels" asp-action="Form">
-        <i class="fa-solid fa-plus"></i> Cadastrar
-      </a>
+
+      @if (!User.IsInRole("visitor"))
+      {
+        <a class="btn btn-primary" asp-controller="Channels" asp-action="Form">
+          <i class="fa-solid fa-plus"></i> Cadastrar
+        </a>
+      }
     </div>
     <hr />
   </header>
@@ -79,13 +83,17 @@
           <p class="card-text">@Channel.Category</p>
 
           <div class="d-flex gap-1">
-            <a 
-              class="btn btn-sm btn-primary" 
-              asp-controller="Channels" 
-              asp-action="Form" 
-              asp-route-id="@Channel.Id">
-              <i class="fa-solid fa-pen-to-square"></i>
-            </a>
+            @if (!User.IsInRole("visitor"))
+            {
+              <a 
+                class="btn btn-sm btn-primary" 
+                asp-controller="Channels" 
+                asp-action="Form" 
+                asp-route-id="@Channel.Id">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </a>
+            }
+
             <a 
               class="btn btn-sm btn-secondary" 
               data-bs-toggle="modal" 

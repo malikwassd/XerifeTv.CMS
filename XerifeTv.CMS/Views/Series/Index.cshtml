@@ -15,9 +15,13 @@
   <header>
     <div class="d-flex align-items-center justify-content-between gap-4">
       <span class="fs-3 fw-normal">Séries</span>
-      <a class="btn btn-primary" asp-controller="Series" asp-action="Form">
-        <i class="fa-solid fa-plus"></i> Cadastrar
-      </a>
+
+      @if (!User.IsInRole("visitor"))
+      {
+        <a class="btn btn-primary" asp-controller="Series" asp-action="Form">
+          <i class="fa-solid fa-plus"></i> Cadastrar
+        </a>
+      }
     </div>
     <hr />
   </header>
@@ -79,13 +83,18 @@
             <a class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#seriesDetailsModal-@serie.Id">
               <i class="fa-solid fa-eye"></i>
             </a>
-            <a 
-              class="btn btn-sm btn-primary" 
-              asp-controller="Series" 
-              asp-action="Form" 
-              asp-route-id="@serie.Id">
-              <i class="fa-solid fa-pen-to-square"></i>
-            </a>
+
+            @if (!User.IsInRole("visitor"))
+            {
+              <a 
+                class="btn btn-sm btn-primary" 
+                asp-controller="Series" 
+                asp-action="Form" 
+                asp-route-id="@serie.Id">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </a>
+            }
+
             <a 
               class="btn btn-sm btn-info" 
               asp-controller="Series" 
