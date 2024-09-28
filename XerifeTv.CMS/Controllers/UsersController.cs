@@ -19,9 +19,19 @@ public class UsersController(IUserService _service) : Controller
     return View(Enumerable.Empty<GetUserRequestDto>());
   }
 
-  public IActionResult SignIn() => View();
+  [AllowAnonymous]
+  public IActionResult SignIn()
+  {
+    if (User.Identity is null) return View();
+
+    if (User.Identity.IsAuthenticated) 
+      return RedirectToAction("Index", "Home");
+
+    return View();
+  }
 
   [HttpPost]
+  [AllowAnonymous]
   public async Task<IActionResult> SignIn(LoginUserRequestDto dto)
   {
     var response = await _service.Login(dto);

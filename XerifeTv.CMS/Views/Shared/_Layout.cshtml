@@ -4,7 +4,9 @@
   pagesView.Add(["Movies", "Index", "Filmes", "fa-solid fa-film"]);
   pagesView.Add(["Series", "Index", "Séries", "fa-solid fa-video"]);
   pagesView.Add(["Channels", "Index", "Canais", "fa-solid fa-satellite-dish"]);
-  pagesView.Add(["Users", "Index", "Usuários", "fa-solid fa-users"]);
+
+  if (User.IsInRole("admin"))
+    pagesView.Add(["Users", "Index", "Usuários", "fa-solid fa-users"]);
 
   /* pagesView[x][0] => Controller view
    * pagesView[x][1] => Controller action view
