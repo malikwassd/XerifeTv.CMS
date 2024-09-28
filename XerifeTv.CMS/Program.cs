@@ -9,7 +9,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.Configure<DBSettings>(
   builder.Configuration.GetSection("MongoDBConfig"));
 
-builder.Services.AddConfiguration();
+builder.Services.AddConfiguration(builder.Configuration);
 
 var app = builder.Build();
 
@@ -21,6 +21,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

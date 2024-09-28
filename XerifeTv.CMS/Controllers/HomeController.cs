@@ -8,8 +8,13 @@ public class HomeController(IDashboardService _service) : Controller
 {
   public async Task<IActionResult> Index()
   {
-    var response = await _service.Get();
+    if (User.Identity is null) 
+      return RedirectToAction("SignIn", "Users");
 
+    if (!User.Identity.IsAuthenticated) 
+      return RedirectToAction("SignIn", "Users");
+
+    var response = await _service.Get();
     if (response.IsSuccess) return View(response.Data);
 
     return View(new GetDashboardDataRequestDto(0, 0, 0));

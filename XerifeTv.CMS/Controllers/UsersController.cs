@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using XerifeTv.CMS.Models.User.Dtos.Request;
 using XerifeTv.CMS.Models.User.Dtos.Response;
@@ -5,13 +6,14 @@ using XerifeTv.CMS.Models.User.Interfaces;
 
 namespace XerifeTv.CMS.Controllers;
 
+[Authorize(Roles = "admin")]
 public class UsersController(IUserService _service) : Controller
 {
   public async Task<IActionResult> Index()
   {
     var response = await _service.Get(1, 20);
 
-    if (response.IsSuccess) 
+    if (response.IsSuccess)
       return View(response.Data?.Items);
 
     return View(Enumerable.Empty<GetUserRequestDto>());
@@ -23,7 +25,21 @@ public class UsersController(IUserService _service) : Controller
   public async Task<IActionResult> SignIn(LoginUserRequestDto dto)
   {
     var response = await _service.Login(dto);
-    return View();
+
+    if (response.IsFailure) return View();
+
+    var cookieOptions = new CookieOptions
+    {
+      HttpOnly = true,
+      Secure = true,
+      SameSite = SameSiteMode.Strict,
+      Expires = DateTime.UtcNow.AddDays(30)
+    };
+
+    var token = response.Data?.Token ?? string.Empty;
+    Response.Cookies.Append("token", token, cookieOptions);
+
+    return RedirectToAction("Index", "Home");
   }
 
   public async Task<IActionResult> Register(RegisterUserRequestDto dto)

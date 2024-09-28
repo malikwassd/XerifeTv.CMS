@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using XerifeTv.CMS.Models.Abstractions;
 using XerifeTv.CMS.Models.Channel.Dtos.Request;
@@ -7,6 +8,7 @@ using XerifeTv.CMS.Models.Channel.Interfaces;
 
 namespace XerifeTv.CMS.Controllers;
 
+[Authorize]
 public class ChannelsController(IChannelService _service) : Controller
 {
   private const int limitResultsPage = 15;

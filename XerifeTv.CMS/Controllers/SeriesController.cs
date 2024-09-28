@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using XerifeTv.CMS.Models.Abstractions;
 using XerifeTv.CMS.Models.Series.Dtos.Request;
 using XerifeTv.CMS.Models.Series.Dtos.Response;
@@ -7,6 +8,7 @@ using XerifeTv.CMS.Models.Series.Interfaces;
 
 namespace XerifeTv.CMS.Controllers;
 
+[Authorize]
 public class SeriesController(ISeriesService _service) : Controller
 {
   private const int limitResultsPage = 15;

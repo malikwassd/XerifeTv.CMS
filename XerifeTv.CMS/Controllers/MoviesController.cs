@@ -4,9 +4,11 @@ using XerifeTv.CMS.Models.Movie.Dtos.Request;
 using XerifeTv.CMS.Models.Movie.Interfaces;
 using XerifeTv.CMS.Models.Abstractions;
 using XerifeTv.CMS.Models.Movie.Dtos.Response;
+using Microsoft.AspNetCore.Authorization;
 
 namespace XerifeTv.CMS.Controllers;
 
+[Authorize]
 public class MoviesController(IMovieService _service) : Controller
 {
   private const int limitResultsPage = 15;
