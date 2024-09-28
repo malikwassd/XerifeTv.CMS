@@ -20,7 +20,9 @@ public class UserService(
       var result = new PagedList<GetUserRequestDto>(
         response.CurrentPage,
         response.TotalPageCount,
-        response.Items.Select(GetUserRequestDto.FromEntity));
+        response.Items
+          .Where(r => r.Role != Enums.EUserRole.ADMIN)
+          .Select(GetUserRequestDto.FromEntity));
 
       return Result<PagedList<GetUserRequestDto>>.Success(result);
     }
@@ -84,6 +86,9 @@ public class UserService(
 
       if (response is null)
         return Result<bool>.Failure(new Error("404", "user not found"));
+
+      if (response.Role == Enums.EUserRole.ADMIN)
+        return Result<bool>.Failure(new Error("403", "user cannot be deleted"));
 
       await _repository.DeleteAsync(id);
       return Result<bool>.Success(true);
