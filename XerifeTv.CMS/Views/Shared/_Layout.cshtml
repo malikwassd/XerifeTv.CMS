@@ -38,9 +38,17 @@
       {
         <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
           <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-            <a href="/" class="d-flex align-items-center py-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <div 
+              class="d-flex align-items-center gap-2 mt-1 w-100" 
+              style="padding: 0.3rem 0.5rem; border-radius: 0.5rem; background: #2e2e2e;">
+              <img src="~/assets/profile.png" alt="profile" style="width: 1.75rem; height: 1.75rem;" />
+              <span>@User.Identity?.Name</span>
+            </div>
+
+            <a href="/" class="d-flex align-items-center py-3 mt-3 mb-md-0 me-md-auto text-white text-decoration-none">
               <img class="w-75 d-none d-md-block" src="~/assets/logo.png" alt="Xerife.TV CMS" />
             </a>
+
             <ul class="nav nav-pills flex-column mb-sm-auto mb-0 mt-3 align-items-center align-items-sm-start" id="menu">
               @foreach (var pageView in pagesView)
               {
@@ -54,7 +62,7 @@
               }
             </ul>
 
-            <ul class="nav nav-pills mb-0">
+            <ul class="nav nav-pills mb-0"> 
               <li class="nav-item py-2">
                 <a class="nav-link px-0 align-middle fs-5 text-light"
                    asp-controller="Users"
