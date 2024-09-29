@@ -4,9 +4,11 @@ using XerifeTv.CMS.Models.Movie.Dtos.Request;
 using XerifeTv.CMS.Models.Movie.Interfaces;
 using XerifeTv.CMS.Models.Abstractions;
 using XerifeTv.CMS.Models.Movie.Dtos.Response;
+using Microsoft.AspNetCore.Authorization;
 
 namespace XerifeTv.CMS.Controllers;
 
+[Authorize]
 public class MoviesController(IMovieService _service) : Controller
 {
   private const int limitResultsPage = 15;
@@ -41,6 +43,7 @@ public class MoviesController(IMovieService _service) : Controller
     return View(Enumerable.Empty<GetMovieResponseDto>());
   }
 
+  [Authorize(Roles = "admin, common")]
   public async Task<IActionResult> Form(string? id)
   {
     if (id is not null)
@@ -52,6 +55,7 @@ public class MoviesController(IMovieService _service) : Controller
     return View();
   }
 
+  [Authorize(Roles = "admin, common")]
   public async Task<IActionResult> Create(CreateMovieRequestDto dto)
   {
     await _service.Create(dto);
@@ -59,6 +63,7 @@ public class MoviesController(IMovieService _service) : Controller
     return RedirectToAction("Index");
   }
 
+  [Authorize(Roles = "admin, common")]
   public async Task<IActionResult> Update(UpdateMovieRequestDto dto)
   {
     await _service.Update(dto);
@@ -66,6 +71,7 @@ public class MoviesController(IMovieService _service) : Controller
     return RedirectToAction("Index");
   }
 
+  [Authorize(Roles = "admin, common")]
   public async Task<IActionResult> Delete(string? id)
   {
     if (id is not null) await _service.Delete(id);

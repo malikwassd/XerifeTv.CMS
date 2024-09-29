@@ -21,9 +21,13 @@
         </a>
         <span class="fs-3 fw-normal">Episódios (@Model.SerieTitle)</span>
       </div>
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#episodeFormModal-@episodeEmpty.Id">
-        <i class="fa-solid fa-plus"></i> Cadastrar
-      </button>
+
+      @if (!User.IsInRole("visitor"))
+      {
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#episodeFormModal-@episodeEmpty.Id">
+          <i class="fa-solid fa-plus"></i> Cadastrar
+        </button>
+      }
     </div>
     <hr />
   </header>
@@ -69,9 +73,12 @@
                 </small>
               </p>
 
-              <a class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#episodeFormModal-@episode.Id">
-                <i class="fa-solid fa-pen-to-square"></i>
-              </a>
+              @if (!User.IsInRole("visitor"))
+              {
+                <a class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#episodeFormModal-@episode.Id">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+              }
 
               <a 
                 class="btn btn-sm btn-secondary" 

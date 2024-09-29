@@ -5,6 +5,9 @@
   pagesView.Add(["Series", "Index", "Séries", "fa-solid fa-video"]);
   pagesView.Add(["Channels", "Index", "Canais", "fa-solid fa-satellite-dish"]);
 
+  if (User.IsInRole("admin"))
+    pagesView.Add(["Users", "Index", "Usuários", "fa-solid fa-users"]);
+
   /* pagesView[x][0] => Controller view
    * pagesView[x][1] => Controller action view
    * pagesView[x][2] => Page name in side menu
@@ -30,27 +33,49 @@
 <body>
   <div class="container-fluid">
     <div class="row flex-nowrap">
-      <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
-        <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-          <a href="/" class="d-flex align-items-center py-3 mb-md-0 me-md-auto text-white text-decoration-none">
-            <img class="w-75 d-none d-md-block" src="~/assets/logo.png" alt="Xerife.TV CMS" />
-          </a>
-          <ul class="nav nav-pills flex-column mb-sm-auto mb-0 mt-3 align-items-center align-items-sm-start" id="menu">
-            @foreach (var pageView in pagesView)
-            {
+
+      @if (ViewData["title"]?.ToString() != "SignIn")
+      {
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+          <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+            <div 
+              class="d-flex align-items-center gap-2 mt-1 w-100" 
+              style="padding: 0.3rem 0.5rem; border-radius: 0.5rem; background: #2e2e2e;">
+              <img src="~/assets/profile.png" alt="profile" style="width: 1.75rem; height: 1.75rem;" />
+              <span>@User.Identity?.Name</span>
+            </div>
+
+            <a href="/" class="d-flex align-items-center py-3 mt-3 mb-md-0 me-md-auto text-white text-decoration-none">
+              <img class="w-75 d-none d-md-block" src="~/assets/logo.png" alt="Xerife.TV CMS" />
+            </a>
+
+            <ul class="nav nav-pills flex-column mb-sm-auto mb-0 mt-3 align-items-center align-items-sm-start" id="menu">
+              @foreach (var pageView in pagesView)
+              {
+                <li class="nav-item py-2">
+                  <a class="nav-link px-0 align-middle fs-5 @(ViewData["Title"]?.ToString() == pageView[2] ? "text-info" : "text-light")"
+                     asp-controller="@pageView[0]"
+                     asp-action="@pageView[1]">
+                    <i class="@pageView[3]"></i> <span class="ms-1 d-none d-sm-inline">@pageView[2]</span>
+                  </a>
+                </li>
+              }
+            </ul>
+
+            <ul class="nav nav-pills mb-0"> 
               <li class="nav-item py-2">
-                <a 
-                  class="nav-link px-0 align-middle fs-5 @(ViewData["Title"]?.ToString() == pageView[2] ? "text-info" : "text-light")" 
-                  asp-controller="@pageView[0]" 
-                  asp-action="@pageView[1]">
-                  <i class="@pageView[3]"></i> <span class="ms-1 d-none d-sm-inline">@pageView[2]</span>
+                <a class="nav-link px-0 align-middle fs-5 text-light"
+                   asp-controller="Users"
+                   asp-action="Logout">
+                  <i class="fa-solid fa-right-from-bracket"></i> <span class="ms-1 d-none d-sm-inline">Sair</span>
                 </a>
               </li>
-            }
-          </ul>
-          <hr>
+            </ul>
+            <hr>
+          </div>
         </div>
-      </div>
+      }
+     
       <div class="col py-3" style="max-height:95vh; overflow:auto;">
         @RenderBody()
       </div>

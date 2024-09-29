@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using XerifeTv.CMS.Models.Abstractions;
 using XerifeTv.CMS.Models.Channel.Dtos.Request;
@@ -7,6 +8,7 @@ using XerifeTv.CMS.Models.Channel.Interfaces;
 
 namespace XerifeTv.CMS.Controllers;
 
+[Authorize]
 public class ChannelsController(IChannelService _service) : Controller
 {
   private const int limitResultsPage = 15;
@@ -41,6 +43,7 @@ public class ChannelsController(IChannelService _service) : Controller
     return View(Enumerable.Empty<GetChannelResponseDto>());
   }
 
+  [Authorize(Roles = "admin, common")]
   public async Task<IActionResult> Form(string? id)
   {
     if (id is not null)
@@ -52,6 +55,7 @@ public class ChannelsController(IChannelService _service) : Controller
     return View();
   }
 
+  [Authorize(Roles = "admin, common")]
   public async Task<IActionResult> Create(CreateChannelRequestDto dto)
   {
     await _service.Create(dto);
@@ -59,6 +63,7 @@ public class ChannelsController(IChannelService _service) : Controller
     return RedirectToAction("Index");
   }
 
+  [Authorize(Roles = "admin, common")]
   public async Task<IActionResult> Update(UpdateChannelRequestDto dto)
   {
     await _service.Update(dto);
@@ -66,6 +71,7 @@ public class ChannelsController(IChannelService _service) : Controller
     return RedirectToAction("Index");
   }
 
+  [Authorize(Roles = "admin, common")]
   public async Task<IActionResult> Delete(string? id)
   {
     if (id is not null) await _service.Delete(id);
