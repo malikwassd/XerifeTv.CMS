@@ -39,6 +39,11 @@ public class UserService(
     {
       var entity = dto.ToEntity();
 
+      var userByName = await _repository.GetByUserNameAsync(entity.UserName);
+
+      if (userByName is not null)
+        return Result<string>.Failure(new Error("409", "username already registered"));
+
       entity.Password = new HashPassword(_configuration).Encrypt(dto.Password);
 
       var response = await _repository.CreateAsync(entity);

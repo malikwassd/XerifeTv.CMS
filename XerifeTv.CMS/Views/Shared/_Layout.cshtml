@@ -1,4 +1,8 @@
-﻿@{
+﻿@using XerifeTv.CMS.Models.Abstractions;
+
+@{
+  var messageView = ViewData["Message"] as MessageView;
+
   ICollection<string[]> pagesView = [];
   pagesView.Add(["Home", "Index", "Dashboard", "fa-solid fa-chart-simple"]);
   pagesView.Add(["Movies", "Index", "Filmes", "fa-solid fa-film"]);
@@ -32,6 +36,13 @@
 </head>
 <body>
   <div class="container-fluid">
+    <div 
+      class="w-25 alert" 
+      role="alert" 
+      id="message-box" 
+      style="display: none; position: absolute; bottom: 0.5rem; right: 0.5rem;">
+    </div>
+
     <div class="row flex-nowrap">
 
       @if (ViewData["title"]?.ToString() != "SignIn")
@@ -64,9 +75,10 @@
 
             <ul class="nav nav-pills mb-0"> 
               <li class="nav-item py-2">
-                <a class="nav-link px-0 align-middle fs-5 text-light"
-                   asp-controller="Users"
-                   asp-action="Logout">
+                <a 
+                  class="nav-link px-0 align-middle fs-5 text-light"
+                  asp-controller="Users"
+                  asp-action="Logout">
                   <i class="fa-solid fa-right-from-bracket"></i> <span class="ms-1 d-none d-sm-inline">Sair</span>
                 </a>
               </li>
@@ -87,5 +99,28 @@
     <script src="~/js/env.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+
+  <script>
+    const messageBox = document.getElementById('message-box');
+    
+    switch ('@messageView?.Type') {
+      case '@EMessageViewType.SUCCESS':
+        messageBox.classList.add('alert-success');
+        break;
+      case '@EMessageViewType.ALERT':
+        messageBox.classList.add('alert-warning');
+        break;
+      case '@EMessageViewType.ERROR':
+        messageBox.classList.add('alert-danger');
+        break;
+    }
+
+    if ('@messageView?.Message') {
+      messageBox.textContent = '@messageView?.Message';
+      messageBox.style.display = 'block';
+      setTimeout(() => messageBox.style.display = 'none', 4000);
+    }
+  </script>
 </body>
 </html>

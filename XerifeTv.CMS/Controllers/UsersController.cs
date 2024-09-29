@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using XerifeTv.CMS.Models.Abstractions;
 using XerifeTv.CMS.Models.User.Dtos.Request;
 using XerifeTv.CMS.Models.User.Dtos.Response;
 using XerifeTv.CMS.Models.User.Interfaces;
@@ -9,8 +10,10 @@ namespace XerifeTv.CMS.Controllers;
 [Authorize(Roles = "admin")]
 public class UsersController(IUserService _service) : Controller
 {
-  public async Task<IActionResult> Index()
+  public async Task<IActionResult> Index(MessageView? messageView)
   {
+    ViewData["Message"] = messageView;
+
     var response = await _service.Get(1, 20);
 
     if (response.IsSuccess)
@@ -36,7 +39,14 @@ public class UsersController(IUserService _service) : Controller
   {
     var response = await _service.Login(dto);
 
-    if (response.IsFailure) return View();
+    if (response.IsFailure)
+    {
+      ViewData["Message"] = new MessageView(
+        EMessageViewType.ERROR,
+        response.Error.Description ?? string.Empty);
+
+      return View();
+    }
 
     var cookieOptions = new CookieOptions
     {
@@ -61,7 +71,13 @@ public class UsersController(IUserService _service) : Controller
 
   public async Task<IActionResult> Register(RegisterUserRequestDto dto)
   {
-    await _service.Register(dto);
+    var response = await _service.Register(dto);
+
+    if (response.IsFailure)
+      return RedirectToAction("Index", new MessageView(
+        EMessageViewType.ERROR,
+        response.Error.Description ?? string.Empty));
+
     return RedirectToAction("Index");
   }
 
