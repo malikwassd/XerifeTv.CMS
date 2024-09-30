@@ -42,7 +42,7 @@ public class UserService(
       var userByName = await _repository.GetByUserNameAsync(entity.UserName);
 
       if (userByName is not null)
-        return Result<string>.Failure(new Error("409", "username already registered"));
+        return Result<string>.Failure(new Error("409", "username ja registrado"));
 
       entity.Password = new HashPassword(_configuration).Encrypt(dto.Password);
 
@@ -64,14 +64,14 @@ public class UserService(
 
       if (response is null)
         return Result<LoginUserResponseDto>.Failure(
-          new Error("404", "user not found"));
+          new Error("404", "usuario nao encontrado"));
 
       var isPasswordCorrect =
         new HashPassword(_configuration).Verify(dto.Password, response.Password);
 
       if (!isPasswordCorrect)
         return Result<LoginUserResponseDto>.Failure(
-          new Error("401", "unauthorized"));
+          new Error("401", "credenciais invalidas"));
 
       return Result<LoginUserResponseDto>.Success(
         new LoginUserResponseDto(_tokenService.GenerateToken(response)));
