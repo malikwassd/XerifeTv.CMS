@@ -6,7 +6,7 @@ using XerifeTv.CMS.Models.User.Interfaces;
 
 namespace XerifeTv.CMS.Models.User;
 
-public class UserService(
+public sealed class UserService(
   IUserRepository _repository, 
   ITokenService _tokenService,
   IConfiguration _configuration) : IUserService

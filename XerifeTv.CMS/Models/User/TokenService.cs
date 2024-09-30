@@ -6,7 +6,7 @@ using XerifeTv.CMS.Models.User.Interfaces;
 
 namespace XerifeTv.CMS.Models.User;
 
-public class TokenService(IConfiguration _configuration) : ITokenService
+public sealed class TokenService(IConfiguration _configuration) : ITokenService
 {
   public string GenerateToken(UserEntity user)
   {

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using XerifeTv.CMS.Models.Channel;
 using XerifeTv.CMS.Models.Channel.Interfaces;
+using XerifeTv.CMS.Models.Content;
+using XerifeTv.CMS.Models.Content.Interfaces;
 using XerifeTv.CMS.Models.Dashboard;
 using XerifeTv.CMS.Models.Dashboard.Interfaces;
 using XerifeTv.CMS.Models.Movie;
@@ -42,6 +44,7 @@ public static class ConfigureServices
     services.AddScoped<ISeriesService, SeriesService>();
     services.AddScoped<IChannelService, ChannelService>();
     services.AddScoped<IDashboardService, DashboardService>();
+    services.AddScoped<IContentService, ContentService>();
     services.AddScoped<IUserService, UserService>();
     services.AddScoped<ITokenService, TokenService>();
     return services;
