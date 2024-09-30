@@ -36,4 +36,14 @@ public sealed class MovieRepository(IOptions<DBSettings> options)
 
     return new PagedList<MovieEntity>(dto.CurrentPage, totalPages, items);
   }
+
+  public async Task<IEnumerable<ItemsByCategory<MovieEntity>>> GetGroupByCategoryAsync(int limit)
+  {
+    return await _collection
+      .Aggregate()
+      .Group(
+        r => r.Category, 
+        g => new ItemsByCategory<MovieEntity>(g.Key, g.Take(limit).ToList()))
+      .ToListAsync();
+  }
 }

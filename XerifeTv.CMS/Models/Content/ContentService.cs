@@ -9,15 +9,28 @@ namespace XerifeTv.CMS.Models.Content;
 
 public sealed class ContentService(IMovieRepository _movieRepository) : IContentService
 {
-  const int limitTotalResults = 50;
-  const int limitPartialResults = 6;
+  const int limitTotalResult = 50;
+  const int limitPartialResult = 2;
+
+  public async Task<Result<IEnumerable<ItemsByCategory<GetMovieContentResponseDto>>>> GetMoviesGroupByCategory(
+    int? limit)
+  {
+    var response = await _movieRepository.GetGroupByCategoryAsync(limit ?? limitPartialResult);
+
+    var result = response.Select(x =>
+      new ItemsByCategory<GetMovieContentResponseDto>(
+      x.Category, x.Items.Select(GetMovieContentResponseDto.FromEntity)));
+
+    return Result<IEnumerable<ItemsByCategory<GetMovieContentResponseDto>>>
+      .Success(result);
+  }
 
   public async Task<Result<IEnumerable<GetMovieContentResponseDto>>> GetMoviesByCategory(
-    string category)
+    string category, int? limit)
   {
     var response = await _movieRepository.GetByFilterAsync(
       new GetMoviesByFilterRequestDto(
-        EMovieSearchFilter.CATEGORY, category, limitTotalResults, 1));
+        EMovieSearchFilter.CATEGORY, category, limit ?? limitTotalResult, 1));
 
     return Result<IEnumerable<GetMovieContentResponseDto>>
       .Success(response.Items.Select(GetMovieContentResponseDto.FromEntity));

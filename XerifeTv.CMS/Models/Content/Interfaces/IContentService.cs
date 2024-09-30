@@ -5,5 +5,6 @@ namespace XerifeTv.CMS.Models.Content.Interfaces;
 
 public interface IContentService
 {
-  Task<Result<IEnumerable<GetMovieContentResponseDto>>> GetMoviesByCategory(string category);
+  Task<Result<IEnumerable<ItemsByCategory<GetMovieContentResponseDto>>>> GetMoviesGroupByCategory(int? limit);
+  Task<Result<IEnumerable<GetMovieContentResponseDto>>> GetMoviesByCategory(string category, int? limit);
 }
