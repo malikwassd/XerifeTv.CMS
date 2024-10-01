@@ -77,8 +77,8 @@
               <li class="nav-item py-2">
                 <a 
                   class="nav-link px-0 align-middle fs-5 text-light"
-                  asp-controller="Users"
-                  asp-action="Logout">
+                  role="button"
+                  onclick="logout()">
                   <i class="fa-solid fa-right-from-bracket"></i> <span class="ms-1 d-none d-sm-inline">Sair</span>
                 </a>
               </li>
@@ -99,8 +99,7 @@
     <script src="~/js/env.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-
-
+    
   <script>
     const messageBox = document.getElementById('message-box');
     
@@ -121,6 +120,11 @@
       messageBox.style.display = 'block';
       setTimeout(() => messageBox.style.display = 'none', 4000);
     }
+
+    function logout() {
+      if (confirm('Deseja realmente sair?'))
+        location.replace('/Users/Logout');
+    } 
   </script>
 </body>
 </html>
