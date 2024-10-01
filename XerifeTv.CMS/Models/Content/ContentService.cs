@@ -7,12 +7,14 @@ using XerifeTv.CMS.Models.Movie.Enums;
 using XerifeTv.CMS.Models.Series.Interfaces;
 using XerifeTv.CMS.Models.Series.Dtos.Request;
 using XerifeTv.CMS.Models.Series.Enums;
+using XerifeTv.CMS.Models.Channel.Interfaces;
 
 namespace XerifeTv.CMS.Models.Content;
 
 public sealed class ContentService(
   IMovieRepository _movieRepository,
-  ISeriesRepository _seriesRepository) : IContentService
+  ISeriesRepository _seriesRepository,
+  IChannelRepository _channelRepository) : IContentService
 {
   const int limitTotalResult = 50;
   const int limitPartialResult = 2;
@@ -63,5 +65,18 @@ public sealed class ContentService(
 
     return Result<IEnumerable<GetSeriesContentResponseDto>>
       .Success(response.Items.Select(GetSeriesContentResponseDto.FromEntity));
+  }
+
+  public async Task<Result<IEnumerable<ItemsByCategory<GetChannelContentResponseDto>>>> GetChannelsGroupByCategory(
+    int? limit)
+  { 
+    var response = await _channelRepository.GetGroupByCategoryAsync(limit ?? limitPartialResult);
+
+    var result = response.Select(x =>
+      new ItemsByCategory<GetChannelContentResponseDto>(
+        x.Category, x.Items.Select(GetChannelContentResponseDto.FromEntity)));
+
+    return Result<IEnumerable<ItemsByCategory<GetChannelContentResponseDto>>>
+      .Success(result);
   }
 }

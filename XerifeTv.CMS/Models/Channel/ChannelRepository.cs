@@ -10,7 +10,7 @@ using MongoDB.Driver;
 
 namespace XerifeTv.CMS.Models.Channel;
 
-public sealed class ChannelRepository(IOptions<DBSettings> options) 
+public sealed class ChannelRepository(IOptions<DBSettings> options)
   : BaseRepository<ChannelEntity>(ECollection.CHANNELS, options), IChannelRepository
 {
   public async Task<PagedList<ChannelEntity>> GetByFilterAsync(GetChannelsByFilterRequestDto dto)
@@ -22,7 +22,7 @@ public sealed class ChannelRepository(IOptions<DBSettings> options)
       _ => r => r.Title.Contains(dto.Search, StringComparison.CurrentCultureIgnoreCase)
     };
 
-    FilterDefinition<ChannelEntity> filter=Builders<ChannelEntity>.Filter.Where(filterExpression);
+    FilterDefinition<ChannelEntity> filter = Builders<ChannelEntity>.Filter.Where(filterExpression);
 
     var count = await _collection.CountDocumentsAsync(filter);
     var items = await _collection.Find(filter)
@@ -34,5 +34,15 @@ public sealed class ChannelRepository(IOptions<DBSettings> options)
     var totalPages = (int)Math.Ceiling(count / (decimal)dto.LimitResults);
 
     return new PagedList<ChannelEntity>(dto.CurrentPage, totalPages, items);
+  }
+
+  public async Task<IEnumerable<ItemsByCategory<ChannelEntity>>> GetGroupByCategoryAsync(int limit)
+  {
+    return await _collection
+      .Aggregate()
+      .Group(
+        r => r.Category,
+        g => new ItemsByCategory<ChannelEntity>(g.Key, g.Take(limit).ToList()))
+      .ToListAsync();
   }
 }

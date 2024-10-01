@@ -9,4 +9,5 @@ public interface IContentService
   Task<Result<IEnumerable<GetMovieContentResponseDto>>> GetMoviesByCategory(string category, int? limit);
   Task<Result<IEnumerable<ItemsByCategory<GetSeriesContentResponseDto>>>> GetSeriesGroupByCategory(int? limit);
   Task<Result<IEnumerable<GetSeriesContentResponseDto>>> GetSeriesByCategory(string category, int? limit);
+  Task<Result<IEnumerable<ItemsByCategory<GetChannelContentResponseDto>>>> GetChannelsGroupByCategory(int? limit);
 }
