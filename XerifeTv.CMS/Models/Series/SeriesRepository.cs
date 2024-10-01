@@ -66,6 +66,16 @@ public sealed class SeriesRepository(IOptions<DBSettings> options)
     return new PagedList<SeriesEntity>(dto.CurrentPage, totalPages, items);
   }
 
+  public async Task<IEnumerable<ItemsByCategory<SeriesEntity>>> GetGroupByCategoryAsync(int limit)
+  {
+    return await _collection
+      .Aggregate()
+      .Group(
+        r => r.Category,
+        g => new ItemsByCategory<SeriesEntity>(g.Key, g.Take(limit).ToList()))
+      .ToListAsync();
+  }
+
   public async Task<SeriesEntity?> GetEpisodesBySeasonAsync(string serieId, int season)
   {
     var filter = Builders<SeriesEntity>.Filter.Eq(r => r.Id, serieId);

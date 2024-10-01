@@ -22,4 +22,22 @@ public class ContentController(IContentService _service) : Controller
 
     return Json(Enumerable.Empty<string>());
   }
+
+  public async Task<JsonResult> Series(int? limit)
+  {
+    var response = await _service.GetSeriesGroupByCategory(limit);
+
+    if (response.IsSuccess) return Json(response.Data);
+
+    return Json(Enumerable.Empty<string>());
+  }
+
+  public async Task<JsonResult> SeriesCategory(string category, int? limit)
+  {
+    var response = await _service.GetSeriesByCategory(category, limit);
+
+    if (response.IsSuccess) return Json(response.Data);
+
+    return Json(Enumerable.Empty<string>());
+  }
 }
