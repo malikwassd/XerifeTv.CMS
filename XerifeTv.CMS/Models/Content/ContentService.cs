@@ -8,6 +8,7 @@ using XerifeTv.CMS.Models.Series.Interfaces;
 using XerifeTv.CMS.Models.Series.Dtos.Request;
 using XerifeTv.CMS.Models.Series.Enums;
 using XerifeTv.CMS.Models.Channel.Interfaces;
+using XerifeTv.CMS.Models.Series;
 
 namespace XerifeTv.CMS.Models.Content;
 
@@ -67,9 +68,17 @@ public sealed class ContentService(
       .Success(response.Items.Select(GetSeriesContentResponseDto.FromEntity));
   }
 
+  public async Task<Result<IEnumerable<Episode>>> GetEpisodesSeriesBySeason(string serieId, int season)
+  {
+    var response = await _seriesRepository.GetEpisodesBySeasonAsync(serieId, season);
+
+    return Result<IEnumerable<Episode>>
+      .Success(response?.Episodes ?? Enumerable.Empty<Episode>());
+  }
+
   public async Task<Result<IEnumerable<ItemsByCategory<GetChannelContentResponseDto>>>> GetChannelsGroupByCategory(
     int? limit)
-  { 
+  {
     var response = await _channelRepository.GetGroupByCategoryAsync(limit ?? limitPartialResult);
 
     var result = response.Select(x =>

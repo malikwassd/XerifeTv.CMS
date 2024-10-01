@@ -41,6 +41,15 @@ public class ContentController(IContentService _service) : Controller
     return Json(Enumerable.Empty<string>());
   }
 
+  public async Task<JsonResult> SeriesEpisodes(string serieId, int season)
+  {
+    var response = await _service.GetEpisodesSeriesBySeason(serieId, season);
+
+    if (response.IsSuccess) return Json(response.Data);
+
+    return Json(Enumerable.Empty<string>());
+  }
+
   public async Task<JsonResult> Channels(int? limit)
   {
     var response = await _service.GetChannelsGroupByCategory(limit);
