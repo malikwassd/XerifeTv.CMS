@@ -137,7 +137,7 @@
             class="form-control" 
             id="review" 
             name="review" 
-            placeholder="7.9"
+            placeholder="7,9"
             value="@Model?.Review" 
             required>
         </div>
@@ -255,7 +255,7 @@
       $('#category').val(response.genres[0]?.name?.toLowerCase());
       $('#synopsis').val(response.overview);
       $('#releaseYear').val(response.release_date.split('-')[0]);
-      $('#review').val(response.vote_average);
+      $('#review').val(response.vote_average.toString().replace('.', ','));
       $('#posterUrl').val(`https://image.tmdb.org/t/p/original${response.poster_path}`);
       $('#bannerUrl').val(`https://image.tmdb.org/t/p/original${response.backdrop_path}`);
 
