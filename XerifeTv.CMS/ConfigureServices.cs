@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using XerifeTv.CMS.Models.Channel;
 using XerifeTv.CMS.Models.Channel.Interfaces;
 using XerifeTv.CMS.Models.Content;
@@ -24,7 +25,8 @@ public static class ConfigureServices
     services
       .AddAuthAuthorization(_configuration)
       .AddRepositories()
-      .AddServices();
+      .AddServices()
+      .AddSwagger();
 
     return services;
   }
@@ -83,6 +85,21 @@ public static class ConfigureServices
     });
 
     services.AddAuthorization();
+    return services;
+  }
+
+  public static IServiceCollection AddSwagger(this IServiceCollection services)
+  {
+    services.AddSwaggerGen(c =>
+    {
+      c.SwaggerDoc("v1", new OpenApiInfo
+      {
+        Version = "v1",
+        Title = "Content API",
+        Description = "content API documentation"
+      });
+    });
+
     return services;
   }
 }

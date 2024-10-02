@@ -26,6 +26,9 @@ app.UseStatusCodePages(context =>
   if (response.StatusCode == 403)
     response.Redirect("/Users/UserUnauthorized");
 
+  if (response.StatusCode == 404)
+    response.Redirect("/");
+
   return Task.CompletedTask;
 });
 
@@ -36,6 +39,14 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseSwagger();
+
+app.UseSwaggerUI(c =>
+{
+  c.SwaggerEndpoint("/swagger/v1/swagger.json", "Content API version 1");
+  c.RoutePrefix = "Api";
+});
 
 app.MapControllerRoute(
     name: "default",
