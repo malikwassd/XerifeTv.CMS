@@ -9,13 +9,17 @@ using XerifeTv.CMS.Models.Series.Dtos.Request;
 using XerifeTv.CMS.Models.Series.Enums;
 using XerifeTv.CMS.Models.Channel.Interfaces;
 using XerifeTv.CMS.Models.Series;
+using XerifeTv.CMS.Models.Abstractions.Services;
+using XerifeTv.CMS.Models.Movie;
+using XerifeTv.CMS.Models.Channel;
 
 namespace XerifeTv.CMS.Models.Content;
 
 public sealed class ContentService(
   IMovieRepository _movieRepository,
   ISeriesRepository _seriesRepository,
-  IChannelRepository _channelRepository) : IContentService
+  IChannelRepository _channelRepository,
+  ICacheService _cacheService) : IContentService
 {
   const int limitTotalResult = 50;
   const int limitPartialResult = 2;
@@ -23,7 +27,14 @@ public sealed class ContentService(
   public async Task<Result<IEnumerable<ItemsByCategory<GetMovieContentResponseDto>>>> GetMoviesGroupByCategory(
     int? limit)
   {
-    var response = await _movieRepository.GetGroupByCategoryAsync(limit ?? limitPartialResult);
+    var cacheKey = $"moviesGroupByCategory-{limit}";
+    var response = _cacheService.GetValue<IEnumerable<ItemsByCategory<MovieEntity>>>(cacheKey);
+
+    if (response is null)
+    {
+      response = await _movieRepository.GetGroupByCategoryAsync(limit ?? limitPartialResult);
+      _cacheService.SetValue(cacheKey, response);
+    }
 
     var result = response.Select(x =>
       new ItemsByCategory<GetMovieContentResponseDto>(
@@ -36,9 +47,16 @@ public sealed class ContentService(
   public async Task<Result<IEnumerable<GetMovieContentResponseDto>>> GetMoviesByCategory(
     string category, int? limit)
   {
-    var response = await _movieRepository.GetByFilterAsync(
-      new GetMoviesByFilterRequestDto(
-        EMovieSearchFilter.CATEGORY, category, limit ?? limitTotalResult, 1));
+    var cacheKey = $"moviesByCategory-{category}-{limit}";
+    var response = _cacheService.GetValue<PagedList<MovieEntity>>(cacheKey);
+
+    if (response is null)
+    {
+      response = await _movieRepository.GetByFilterAsync(
+        new GetMoviesByFilterRequestDto(
+          EMovieSearchFilter.CATEGORY, category, limit ?? limitTotalResult, 1));
+      _cacheService.SetValue(cacheKey, response);
+    }
 
     return Result<IEnumerable<GetMovieContentResponseDto>>
       .Success(response.Items.Select(GetMovieContentResponseDto.FromEntity));
@@ -47,7 +65,14 @@ public sealed class ContentService(
   public async Task<Result<IEnumerable<ItemsByCategory<GetSeriesContentResponseDto>>>> GetSeriesGroupByCategory(
     int? limit)
   {
-    var response = await _seriesRepository.GetGroupByCategoryAsync(limit ?? limitPartialResult);
+    var cacheKey = $"seriesGroupByCategory-{limit}";
+    var response = _cacheService.GetValue<IEnumerable<ItemsByCategory<SeriesEntity>>>(cacheKey);
+
+    if (response is null)
+    {
+      response = await _seriesRepository.GetGroupByCategoryAsync(limit ?? limitPartialResult);
+      _cacheService.SetValue(cacheKey, response);
+    }
 
     var result = response.Select(x =>
       new ItemsByCategory<GetSeriesContentResponseDto>(
@@ -60,9 +85,16 @@ public sealed class ContentService(
   public async Task<Result<IEnumerable<GetSeriesContentResponseDto>>> GetSeriesByCategory(
     string category, int? limit)
   {
-    var response = await _seriesRepository.GetByFilterAsync(
-      new GetSeriesByFilterRequestDto(
-        ESeriesSearchFilter.CATEGORY, category, limit ?? limitTotalResult, 1));
+    var cacheKey = $"seriesByCategory-{category}-{limit}";
+    var response = _cacheService.GetValue<PagedList<SeriesEntity>>(cacheKey);
+
+    if (response is null)
+    {
+      response = await _seriesRepository.GetByFilterAsync(
+        new GetSeriesByFilterRequestDto(
+          ESeriesSearchFilter.CATEGORY, category, limit ?? limitTotalResult, 1));
+      _cacheService.SetValue(cacheKey, response);
+    }
 
     return Result<IEnumerable<GetSeriesContentResponseDto>>
       .Success(response.Items.Select(GetSeriesContentResponseDto.FromEntity));
@@ -70,7 +102,14 @@ public sealed class ContentService(
 
   public async Task<Result<IEnumerable<Episode>>> GetEpisodesSeriesBySeason(string serieId, int season)
   {
-    var response = await _seriesRepository.GetEpisodesBySeasonAsync(serieId, season);
+    var cacheKey = $"episodesSeriesBySeason-{serieId}-{season}";
+    var response = _cacheService.GetValue<SeriesEntity>(cacheKey);
+
+    if (response is null)
+    {
+      response = await _seriesRepository.GetEpisodesBySeasonAsync(serieId, season);
+      _cacheService.SetValue(cacheKey, response);
+    }
 
     return Result<IEnumerable<Episode>>
       .Success(response?.Episodes ?? Enumerable.Empty<Episode>());
@@ -79,7 +118,14 @@ public sealed class ContentService(
   public async Task<Result<IEnumerable<ItemsByCategory<GetChannelContentResponseDto>>>> GetChannelsGroupByCategory(
     int? limit)
   {
-    var response = await _channelRepository.GetGroupByCategoryAsync(limit ?? limitPartialResult);
+    var cacheKey = $"channelsGroupByCategory-{limit}";
+    var response = _cacheService.GetValue<IEnumerable<ItemsByCategory<ChannelEntity>>>(cacheKey);
+
+    if (response is null)
+    {
+      response = await _channelRepository.GetGroupByCategoryAsync(limit?? limitPartialResult);
+      _cacheService.SetValue(cacheKey, response);
+    }
 
     var result = response.Select(x =>
       new ItemsByCategory<GetChannelContentResponseDto>(
