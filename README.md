@@ -10,7 +10,7 @@ XerifeTv CMS is a content management system (CMS) developed for Over-The-Top (OT
 - [X]  **Content Management:** Easily register, edit, and organize movies, series, episodes, and TV channels.
 - [X]  **JWT Authentication:** Secure authentication system based on JSON Web Tokens.
 - [X]  **Swagger Documentation:** REST API routes documented with Swagger.
-- [ ]  **API Content Route Caching:** Store the data returned from the content API in cache.
+- [X]  **API Content Route Caching:** Store the data returned from the content API in cache.
 
 ## 🚀 Technologies:
 - C#
@@ -20,7 +20,7 @@ XerifeTv CMS is a content management system (CMS) developed for Over-The-Top (OT
 - JWT Authentication
 - MongoDB
 - MVC Architecture
-- Redis
+- Cache In Memory
 - Swagger
 
 ## 📥 Installing the project
