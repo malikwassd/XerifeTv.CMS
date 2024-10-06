@@ -22,6 +22,7 @@ XerifeTv CMS is a content management system (CMS) developed for Over-The-Top (OT
 - MVC Architecture
 - Cache In Memory
 - Swagger
+- Docker
 
 ## 📥 Installing the project
 
