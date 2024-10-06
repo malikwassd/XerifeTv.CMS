@@ -1,22 +1,22 @@
-# Etapa 1: Build da aplicação
+# Step 1: Build the application
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /app
 
-# Copia os arquivos .csproj e restaura dependências
+# Copy .csproj files and restore dependencies
 COPY *.csproj ./
 RUN dotnet restore
 
-# Copia o resto dos arquivos e faz o build da aplicação
+# Copy the rest of the files and build the application
 COPY . ./
 RUN dotnet publish -c Release -o out
 
-# Etapa 2: Configuração do ambiente de runtime
+# Step 2: Setting up the runtime environment
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build-env /app/out .
 
-# Expõe a porta 80 para o container
+# Expose port 88 to the container
 EXPOSE 88
 
-# Comando de inicialização da aplicação
+# Application startup command
 ENTRYPOINT ["dotnet", "XerifeTv.CMS.dll"]

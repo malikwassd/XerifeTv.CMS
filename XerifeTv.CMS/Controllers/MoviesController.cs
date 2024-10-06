@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace XerifeTv.CMS.Controllers;
 
 [Authorize]
-public class MoviesController(IMovieService _service) : Controller
+public class MoviesController(IMovieService _service, IConfiguration _configuration) : Controller
 {
   private const int limitResultsPage = 15;
 
@@ -77,5 +77,19 @@ public class MoviesController(IMovieService _service) : Controller
     if (id is not null) await _service.Delete(id);
 
     return RedirectToAction("Index");
+  }
+
+  [HttpGet]
+  public async Task<JsonResult> GetByImdbId(string id)
+  {
+    var client = new HttpClient();
+    var url = $"https://api.themoviedb.org/3/movie/{id}";
+
+    HttpResponseMessage response = await client.GetAsync(
+      $"{url}?api_key={_configuration["Tmdb:Key"]}&language=pt-BR&page=1");
+
+    return Json(response.IsSuccessStatusCode 
+      ? response.Content.ReadAsStringAsync()
+      : Enumerable.Empty<string>());
   }
 }

@@ -238,8 +238,9 @@
 @section scripts {
   <script defer>
     async function getMovieByTmdb(imdbId) {
-      const response = await httpClient(`https://api.themoviedb.org/3/movie/${imdbId}`);
-      return response.data;
+      const response = await fetch(`/Movies/GetByImdbId?id=${imdbId}`);
+      const data = await response.json();
+      return JSON.parse(data.result);
     }
 
     $('#imdb-form').submit(async (e) => {
