@@ -1,9 +1,10 @@
-# XerifeTv CMS
+![Logo](https://i.ibb.co/tD717gs/logo.png)
+#
 
 XerifeTv CMS is a content management system (CMS) developed for Over-The-Top (OTT) streaming platforms. This project enables efficient organization and management of movies, series, episodes, and TV channels, providing a comprehensive solution for digital content providers.
 
 ####
-![screenshot](https://i.ibb.co/tZW14Pc/Screenshot-2.png)
+![screenshot](https://i.ibb.co/0C7Kjjp/Screenshot-4.png)
 
 ####
 ## ✔ Key Features:
@@ -46,7 +47,7 @@ XerifeTv CMS is a content management system (CMS) developed for Over-The-Top (OT
       "MongoDBConfig": {
             "ConnectionString": "mongodb://localhost:00000",
             "DatabaseName": "xerifetv_content"
-        },
+        }
     }
 
 #### 4. Configure Hash Salt for password encryption in `appsettings.json` file:
