@@ -33,6 +33,12 @@
     <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
     <script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      .nav-link:hover 
+      {
+        background: #191919;
+      }
+    </style>
 </head>
 <body>
   <div class="container-fluid">
@@ -48,7 +54,7 @@
       @if (ViewData["title"]?.ToString() != "SignIn")
       {
         <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
-          <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+          <div class="d-flex flex-column align-items-center align-items-sm-start px-2 pt-2 text-white min-vh-100">
             <div 
               class="d-flex align-items-center gap-2 mt-1 w-100" 
               style="padding: 0.3rem 0.5rem; border-radius: 0.5rem; background: #2e2e2e;">
@@ -60,13 +66,15 @@
               <img class="w-75 d-none d-md-block" src="~/assets/logo.png" alt="Xerife.TV CMS" />
             </a>
 
-            <ul class="nav nav-pills flex-column mb-sm-auto mb-0 mt-3 align-items-center align-items-sm-start" id="menu">
+            <ul class="w-100 nav nav-pills flex-column mb-sm-auto mb-0 mt-3 align-items-center align-items-sm-start" id="menu">
               @foreach (var pageView in pagesView)
               {
-                <li class="nav-item py-2">
-                  <a class="nav-link px-0 align-middle fs-5 @(ViewData["Title"]?.ToString() == pageView[2] ? "text-info" : "text-light")"
-                     asp-controller="@pageView[0]"
-                     asp-action="@pageView[1]">
+                <li class="w-100 nav-item py-2">
+                  <a 
+                    class="nav-link px-2 align-middle fs-6 text-light @(ViewData["Title"]?.ToString() == pageView[2] ? "active" : "")"
+                    style="font-weight: 500;"
+                    asp-controller="@pageView[0]"
+                    asp-action="@pageView[1]">
                     <i class="@pageView[3]"></i> <span class="ms-1 d-none d-sm-inline">@pageView[2]</span>
                   </a>
                 </li>
@@ -74,13 +82,18 @@
 
               @if (!User.IsInRole("visitor")) 
               {
-                <li class="nav-item py-2">
-                  <a href="#submenu" data-bs-toggle="collapse" class="nav-link px-0 align-middle fs-5 text-light">
+                <li class="w-100 nav-item py-2">
+                  <a 
+                    href="#submenu" 
+                    data-bs-toggle="collapse" 
+                    class="nav-link px-2 align-middle fs-6 text-light"
+                    style="font-weight: 500;">
+
                     <i class="fa-solid fa-folder-open"></i> <span class="ms-1 d-none d-sm-inline">Documentação</span></a>
-                    <ul class="collapse nav flex-column ms-3" id="submenu" data-bs-parent="#menu">
+                    <ul class="collapse nav flex-column ms-2" id="submenu" data-bs-parent="#menu">
                       <li class="w-100 py-1">
                         <a 
-                          class="nav-link px-0 align-middle text-light"
+                          class="nav-link px-2 align-middle text-light fs-6"
                           role="button"
                           href="/Api"
                           target="_blank">
@@ -92,10 +105,11 @@
               }
             </ul>
 
-            <ul class="nav nav-pills mb-0 flex-column"> 
-              <li class="nav-item py-2">
+            <ul class="w-100 nav nav-pills mb-0 flex-column"> 
+              <li class="w-100 nav-item py-2">
                 <a 
-                  class="nav-link px-0 align-middle fs-5 text-light"
+                  class="nav-link px-2 align-middle fs-6 text-light"
+                  style="font-weight: 500;"
                   role="button"
                   onclick="logout()">
                   <i class="fa-solid fa-right-from-bracket"></i> <span class="ms-1 d-none d-sm-inline">Sair</span>
