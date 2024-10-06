@@ -13,6 +13,8 @@ builder.Services.AddConfiguration(builder.Configuration);
 
 var app = builder.Build();
 
+app.Urls.Add("http://*:80");
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment()) app.UseHsts();
 
