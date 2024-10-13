@@ -256,11 +256,10 @@
       $('#category').val(response.genres[0]?.name?.toLowerCase());
       $('#synopsis').val(response.overview);
       $('#releaseYear').val(response.release_date.split('-')[0]);
-      $('#review').val(response.vote_average.toString().replace('.', ','));
+      $('#review').val(response.vote_average.toString());
       $('#posterUrl').val(`https://image.tmdb.org/t/p/original${response.poster_path}`);
       $('#bannerUrl').val(`https://image.tmdb.org/t/p/original${response.backdrop_path}`);
-
-      if (response.adult) $('#parentalRating-18').attr('checked', true);
+      $('#parentalRating-18').attr('checked', Boolean(response.adult));
     });
 
     $('#videoDuration').keyup(e => 
