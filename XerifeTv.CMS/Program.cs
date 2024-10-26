@@ -3,8 +3,18 @@ using XerifeTv.CMS.MongoDB;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddCors(options =>
+{
+  options.AddPolicy("AllowAnyOrigin", builder =>
+  {
+    builder
+      .AllowAnyOrigin()
+      .AllowAnyMethod()
+      .AllowAnyHeader();
+  });
+});
 
 builder.Services.Configure<DBSettings>(
   builder.Configuration.GetSection("MongoDBConfig"));
@@ -13,11 +23,11 @@ builder.Services.AddConfiguration(builder.Configuration);
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment()) 
+if (!app.Environment.IsDevelopment())
 {
   app.Urls.Add("http://*:80");
   app.UseHsts();
-} 
+}
 
 app.UseStatusCodePages(context =>
 {
@@ -25,7 +35,7 @@ app.UseStatusCodePages(context =>
 
   if (response.StatusCode == 401)
     response.Redirect("/Users/SignIn");
-  
+
   if (response.StatusCode == 403)
     response.Redirect("/Users/UserUnauthorized");
 
@@ -40,6 +50,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseCors("AllowAnyOrigin");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -52,7 +64,7 @@ app.UseSwaggerUI(c =>
 });
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+  name: "default",
+  pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
