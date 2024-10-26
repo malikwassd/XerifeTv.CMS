@@ -176,12 +176,12 @@
           class="form-control" 
           id="videoUrl" 
           name="videoUrl" 
-          placeholder="http://video.com/video.m3u8" 
+          placeholder="https://video.com/video.m3u8" 
           value="@Model?.Video?.Url"
           required>
       </div>
 
-      <div class="row mb-4">
+      <div class="row mb-3">
         <div class="col-6">
           <label for="videoStreamFormat" class="form-label">Stream Format</label>
           <select 
@@ -215,6 +215,17 @@
             value="@Model?.Video?.Duration"
             required>
         </div>
+      </div>
+
+      <div class="mb-4">
+        <label for="videoSubtitle" class="form-label">Legenda (URL)</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="videoSubtitle" 
+          name="videoSubtitle" 
+          placeholder="https://subtitle.com/vtts/video.vtt" 
+          value="@Model?.Video?.Subtitle">
       </div>
 
       <hr />

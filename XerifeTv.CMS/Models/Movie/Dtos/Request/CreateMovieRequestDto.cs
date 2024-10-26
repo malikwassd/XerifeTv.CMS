@@ -15,6 +15,7 @@ public class CreateMovieRequestDto
   public string VideoUrl { get; init; } = string.Empty;
   public long VideoDuration { get; init; }
   public string VideoStreamFormat { get; init; } = string.Empty;
+  public string? VideoSubtitle { get; init; }
 
   public MovieEntity ToEntity()
   {
@@ -28,7 +29,7 @@ public class CreateMovieRequestDto
       ReleaseYear = ReleaseYear,
       ParentalRating = ParentalRating,
       Review = Review,
-      Video = new Video(VideoUrl,VideoDuration,VideoStreamFormat)
+      Video = new Video(VideoUrl,VideoDuration,VideoStreamFormat, VideoSubtitle)
     };
   }
 }
