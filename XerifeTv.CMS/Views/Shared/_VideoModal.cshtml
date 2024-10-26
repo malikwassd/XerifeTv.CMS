@@ -50,6 +50,16 @@
         src: button.getAttribute('data-bs-video-url'),
         type: streamFormat
       })
+
+      const subtitle = button.getAttribute('data-bs-video-subtitle')
+
+      if (subtitle) 
+        player.addRemoteTextTrack({
+          kind: 'captions',
+          src: subtitle,
+          srclang: 'pt',
+          label: 'Português'
+        }, false)
     })
 
     modal.addEventListener('hide.bs.modal', event => {

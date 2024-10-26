@@ -3,5 +3,5 @@
 public record Video(
   string Url,
   long Duration,
-  string StreamFormat);
-
+  string StreamFormat,
+  string? Subtitle = null);
