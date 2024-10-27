@@ -9,13 +9,18 @@ using Microsoft.AspNetCore.Authorization;
 namespace XerifeTv.CMS.Controllers;
 
 [Authorize]
-public class MoviesController(IMovieService _service, IConfiguration _configuration) : Controller
+public class MoviesController(
+  IMovieService _service, 
+  ILogger<MoviesController> _logger,
+  IConfiguration _configuration) : Controller
 {
   private const int limitResultsPage = 15;
 
   public async Task<IActionResult> Index(int? currentPage, EMovieSearchFilter? filter, string? search)
   {
     Result<PagedList<GetMovieResponseDto>>? result;
+
+    _logger.LogInformation($"{User.Identity?.Name} accessed the movies page");
 
     if (filter is EMovieSearchFilter && !string.IsNullOrEmpty(search))
     {
@@ -60,6 +65,8 @@ public class MoviesController(IMovieService _service, IConfiguration _configurat
   {
     await _service.Create(dto);
 
+    _logger.LogInformation($"{User.Identity?.Name} registered the movie {dto.Title}");
+
     return RedirectToAction("Index");
   }
 
@@ -68,14 +75,20 @@ public class MoviesController(IMovieService _service, IConfiguration _configurat
   {
     await _service.Update(dto);
 
+    _logger.LogInformation($"{User.Identity?.Name} updated the movie {dto.Title}");
+
     return RedirectToAction("Index");
   }
 
   [Authorize(Roles = "admin, common")]
   public async Task<IActionResult> Delete(string? id)
   {
-    if (id is not null) await _service.Delete(id);
-
+    if (id is not null)
+    {
+      await _service.Delete(id);
+      _logger.LogInformation($"{User.Identity?.Name} removed the movie with id = {id}");
+    }
+   
     return RedirectToAction("Index");
   }
 

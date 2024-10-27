@@ -8,13 +8,15 @@ using XerifeTv.CMS.Models.User.Interfaces;
 namespace XerifeTv.CMS.Controllers;
 
 [Authorize(Roles = "admin")]
-public class UsersController(IUserService _service) : Controller
+public class UsersController(IUserService _service, ILogger<UsersController> _logger) : Controller
 {
   public async Task<IActionResult> Index(MessageView? messageView)
   {
     ViewData["Message"] = messageView;
 
     var response = await _service.Get(1, 20);
+
+    _logger.LogInformation($"{User.Identity?.Name} accessed the users page");
 
     if (response.IsSuccess)
       return View(response.Data?.Items);
@@ -45,6 +47,8 @@ public class UsersController(IUserService _service) : Controller
         EMessageViewType.ERROR,
         response.Error.Description ?? string.Empty);
 
+      _logger.LogInformation("There was an unsuccessful login attempt");
+
       return View();
     }
 
@@ -59,12 +63,16 @@ public class UsersController(IUserService _service) : Controller
     var token = response.Data?.Token ?? string.Empty;
     Response.Cookies.Append("token", token, cookieOptions);
 
+    _logger.LogInformation($"{User.Identity?.Name} logged into the system");
+
     return RedirectToAction("Index", "Home");
   }
 
   [AllowAnonymous]
   public IActionResult Logout()
   {
+    _logger.LogInformation($"{User.Identity?.Name} logged out of the system");
+
     Response.Cookies.Delete("token");
     return RedirectToAction("Index", "Home");
   }
@@ -78,15 +86,25 @@ public class UsersController(IUserService _service) : Controller
         EMessageViewType.ERROR,
         response.Error.Description ?? string.Empty));
 
+    _logger.LogInformation($"{User.Identity?.Name} registered a new user");
+
     return RedirectToAction("Index");
   }
 
   public async Task<IActionResult> Delete(string id)
   {
     await _service.Delete(id);
+
+    _logger.LogInformation($"{User.Identity?.Name} removed user with id = {id}");
+
     return RedirectToAction("Index");
   }
 
   [AllowAnonymous]
-  public IActionResult UserUnauthorized() => View();
+  public IActionResult UserUnauthorized()
+  {
+    _logger.LogInformation($"{User.Identity?.Name} tried to access a page for which he is not authorized");
+
+    return View();
+  }
 }
