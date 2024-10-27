@@ -9,13 +9,15 @@ using XerifeTv.CMS.Models.Series.Interfaces;
 namespace XerifeTv.CMS.Controllers;
 
 [Authorize]
-public class SeriesController(ISeriesService _service) : Controller
+public class SeriesController(ISeriesService _service, ILogger<SeriesController> _logger) : Controller
 {
   private const int limitResultsPage = 15;
 
   public async Task<IActionResult> Index(int? currentPage, ESeriesSearchFilter? filter, string? search)
   {
     Result<PagedList<GetSeriesResponseDto>> result;
+
+    _logger.LogInformation($"{User.Identity?.Name} accessed the series page");
 
     if (filter is ESeriesSearchFilter && !string.IsNullOrEmpty(search))
     {
@@ -60,6 +62,8 @@ public class SeriesController(ISeriesService _service) : Controller
   {
     await _service.Create(dto);
 
+    _logger.LogInformation($"{User.Identity?.Name} registered the serie {dto.Title}");
+
     return RedirectToAction("Index");
   }
 
@@ -68,14 +72,20 @@ public class SeriesController(ISeriesService _service) : Controller
   {
     await _service.Update(dto);
 
+    _logger.LogInformation($"{User.Identity?.Name} updated the serie {dto.Title}");
+
     return RedirectToAction("Index");
   }
 
   [Authorize(Roles = "admin, common")]
   public async Task<IActionResult> Delete(string? id)
   {
-    if (id is not null) await _service.Delete(id);
-
+    if (id is not null)
+    {
+      await _service.Delete(id);
+      _logger.LogInformation($"{User.Identity?.Name} removed the serie with id = {id}");
+    }
+      
     return RedirectToAction("Index");
   }
 
@@ -91,6 +101,8 @@ public class SeriesController(ISeriesService _service) : Controller
     if (response.IsSuccess)
     {
       ViewBag.NumberSeasons = response.Data?.NumberSeasons;
+      _logger.LogInformation($"{User.Identity?.Name} accessed the series episodes with id = {id}");
+
       return View(response.Data);
     }
 
@@ -102,6 +114,8 @@ public class SeriesController(ISeriesService _service) : Controller
   {
     await _service.CreateEpisode(dto);
 
+    _logger.LogInformation($"{User.Identity?.Name} registered episode {dto.Number} of season {dto.Season} of the serie with id = {dto.SerieId}");
+
     return RedirectToAction("Episodes", new { id = dto.SerieId });
   }
 
@@ -110,6 +124,8 @@ public class SeriesController(ISeriesService _service) : Controller
   {
     await _service.UpdateEpisode(dto);
 
+    _logger.LogInformation($"{User.Identity?.Name} updated episode {dto.Number} of season {dto.Season} of the serie with id = {dto.SerieId}");
+
     return RedirectToAction("Episodes", new { id = dto.SerieId });
   }
 
@@ -117,8 +133,11 @@ public class SeriesController(ISeriesService _service) : Controller
   public async Task<IActionResult> DeleteEpisode(string? serieId, string? id)
   {
     if (serieId is not null && id is not null)
+    {
       await _service.DeleteEpisode(serieId, id);
-
+      _logger.LogInformation($"{User.Identity?.Name} deleted episode with id = {id} of the serie with id = {serieId}");
+    }
+      
     return RedirectToAction("Episodes", new { id = serieId });
   }
 }
