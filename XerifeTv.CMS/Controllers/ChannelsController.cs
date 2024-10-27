@@ -9,13 +9,15 @@ using XerifeTv.CMS.Models.Channel.Interfaces;
 namespace XerifeTv.CMS.Controllers;
 
 [Authorize]
-public class ChannelsController(IChannelService _service) : Controller
+public class ChannelsController(IChannelService _service, ILogger<ChannelsController> _logger) : Controller
 {
   private const int limitResultsPage = 15;
 
   public async Task<IActionResult> Index(int? currentPage, EChannelSearchFilter? filter, string? search)
   {
     Result<PagedList<GetChannelResponseDto>>? result;
+
+    _logger.LogInformation($"{User.Identity?.Name} accessed the channels page");
 
     if (filter is EChannelSearchFilter && !string.IsNullOrEmpty(search))
     {
@@ -60,6 +62,8 @@ public class ChannelsController(IChannelService _service) : Controller
   {
     await _service.Create(dto);
 
+    _logger.LogInformation($"{User.Identity?.Name} registered the channel {dto.Title}");
+
     return RedirectToAction("Index");
   }
 
@@ -68,14 +72,20 @@ public class ChannelsController(IChannelService _service) : Controller
   {
     await _service.Update(dto);
 
+    _logger.LogInformation($"{User.Identity?.Name} updated the channel {dto.Title}");
+
     return RedirectToAction("Index");
   }
 
   [Authorize(Roles = "admin, common")]
   public async Task<IActionResult> Delete(string? id)
   {
-    if (id is not null) await _service.Delete(id);
-
+    if (id is not null)
+    {
+      await _service.Delete(id);
+      _logger.LogInformation($"{User.Identity?.Name} removed the channel with id = {id}");
+    }
+    
     return RedirectToAction("Index");
   }
 }
