@@ -77,7 +77,14 @@
     @foreach (var Channel in Model)
     {
       <div class="card col-2 pt-1">
-        <img src="@Channel.LogoUrl" class="card-img-top" alt="@Channel.Title" loading="lazy" style="height: 9rem;">
+        <img 
+          src="@Channel.LogoUrl"
+          onerror="this.onerror=null; this.src='/assets/poster_default.jpg';"
+          class="card-img-top" 
+          alt="@Channel.Title" 
+          loading="lazy" 
+          style="height: 9rem;">
+        
         <div class="card-body">
           <h5 class="card-title text-nowrap overflow-hidden text-truncate">@Channel.Title</h5>
           <p class="card-text">@Channel.Category</p>

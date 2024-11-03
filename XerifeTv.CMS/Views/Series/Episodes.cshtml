@@ -39,7 +39,7 @@
       id="seasonFilter" 
       style="max-width: 20%">
 
-      @for (int i = 1; i <= ViewBag.NumberSeasons ?? 1; i++)
+      @for (var i = 1; i <= (ViewBag.NumberSeasons ?? 1); i++)
       {
         if (i == ViewBag.SeasonFilter)
         {
