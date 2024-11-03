@@ -74,7 +74,14 @@
     @foreach (var serie in Model)
     {
       <div class="card col-2 pt-1">
-        <img src="@serie.PosterUrl" class="card-img-top" alt="@serie.Title" loading="lazy" style="height: 14rem;">
+        <img 
+          src="@serie.PosterUrl"
+          onerror="this.onerror=null; this.src='/assets/poster_default.jpg';"
+          class="card-img-top" 
+          alt="@serie.Title" 
+          loading="lazy" 
+          style="height: 14rem;">
+        
         <div class="card-body">
           <h5 class="card-title text-nowrap overflow-hidden text-truncate">@serie.Title</h5>
           <p class="card-text">@serie.Category</p>

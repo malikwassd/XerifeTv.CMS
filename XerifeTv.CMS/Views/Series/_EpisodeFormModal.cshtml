@@ -40,7 +40,7 @@
               name="season" 
               required>
               <option selected value="">Selecione uma opção</option>
-              @for (int i=1; i<=ViewBag.NumberSeasons ?? 1; i++) 
+              @for (var i=1; i<=(ViewBag.NumberSeasons ?? 1); i++) 
               {
                 if (i == Model?.Season)
                 {
