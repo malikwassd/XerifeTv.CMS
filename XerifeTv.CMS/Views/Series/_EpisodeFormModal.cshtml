@@ -107,7 +107,7 @@
             required>
         </div>
 
-        <div class="row">
+        <div class="row mb-2">
           <div class="col-6">
             <label for="videoStreamFormat" class="form-label">Stream Format</label>
             <select 
@@ -142,7 +142,19 @@
               required>
           </div>
         </div>
+
+        <div>
+          <label for="videoSubtitle" class="form-label">Legenda (URL)</label>
+          <input
+            type="text"
+            class="form-control"
+            id="videoSubtitle"
+            name="videoSubtitle"
+            placeholder="http://video.com/subtitles/video.vtt"
+            value="@Model?.Video?.Subtitle">
+        </div>
       </div>
+      
       <div class="modal-footer d-flex justify-content-between">
         @if (!string.IsNullOrEmpty(Model?.Id))
         {
