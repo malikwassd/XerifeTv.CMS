@@ -13,6 +13,7 @@ public class UpdateEpisodeRequestDto
   public string VideoUrl { get; init; } = string.Empty;
   public long VideoDuration { get; init; }
   public string VideoStreamFormat { get; init; } = string.Empty;
+  public string? VideoSubtitle { get; init; }
 
   public Episode ToEntity()
   {
@@ -23,7 +24,7 @@ public class UpdateEpisodeRequestDto
       BannerUrl = BannerUrl,
       Number = Number,
       Season = Season,
-      Video = new Video(VideoUrl, VideoDuration, VideoStreamFormat)
+      Video = new Video(VideoUrl, VideoDuration, VideoStreamFormat, VideoSubtitle)
     };
   }
 }
