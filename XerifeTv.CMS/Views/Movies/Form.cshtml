@@ -237,7 +237,11 @@
               style="display: none" 
               onchange="uploadSubtitleFile()"/>
             
-            <button class="btn btn-success" type="button" onclick="$('#subtitle-file').click()">
+            <button 
+              id="btn-subtitle-file" 
+              class="btn btn-success" 
+              type="button" 
+              onclick="$('#subtitle-file').click()">
               <i class="fa-solid fa-cloud-arrow-up"></i>
             </button>
           </div>
@@ -306,6 +310,8 @@
       const formData = new FormData();
       formData.append('file', file);
       
+      $('#btn-subtitle-file').attr('disabled', 'true');
+      
       fetch('/StorageFiles/UploadFile', {
         method: 'POST',
         body: formData
@@ -314,6 +320,7 @@
         .then(({ isSuccess, data }) => {
           if (isSuccess) $('#videoSubtitle').val(data);
         })
+        .finally(() => $('#btn-subtitle-file').removeAttr('disabled'))
     }
   </script>
 }
