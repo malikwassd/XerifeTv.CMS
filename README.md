@@ -12,6 +12,7 @@ XerifeTv CMS is a content management system (CMS) developed for Over-The-Top (OT
 - [X]  **JWT Authentication:** Secure authentication system based on JSON Web Tokens.
 - [X]  **Swagger Documentation:** REST API routes documented with Swagger.
 - [X]  **API Content Route Caching:** Store the data returned from the content API in cache.
+- [X]  **Supabase Storage Integration:** Store files (.vtt, images, etc...) in storage bucket.
 
 ## 🚀 Technologies:
 - C#
@@ -22,6 +23,7 @@ XerifeTv CMS is a content management system (CMS) developed for Over-The-Top (OT
 - MongoDB
 - MVC Architecture
 - Cache In Memory
+- Supabase Storage
 - Swagger
 - Docker
 
@@ -66,16 +68,24 @@ XerifeTv CMS is a content management system (CMS) developed for Over-The-Top (OT
         }
     }
 
-#### 6. Restore dependencies and compile the project:
+#### 6. Configure the Settings for the Supabase in the `appsettings.json` file:
+    {
+        "Supabase": {
+            "Url": "https://example8095.supabase.co",
+            "Key": "example4533.exampleee.exammpple"
+        }
+    }
+
+#### 7. Restore dependencies and compile the project:
     dotnet restore
     dotnet build
 
 
-#### 7. Start the server:
+#### 8. Start the server:
     dotnet run
 
 
-#### 8. Access the application in the browser:
+#### 9. Access the application in the browser:
     http://localhost:5000
 
 ## License

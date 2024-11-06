@@ -134,7 +134,7 @@
             <label for="videoDuration" class="form-label">Duração(segundos)</label>
             <input 
               type="text" 
-              class="form-control" 
+              class="form-control duration" 
               id="videoDuration" 
               name="videoDuration" 
               placeholder="3600" 
@@ -145,13 +145,24 @@
 
         <div>
           <label for="videoSubtitle" class="form-label">Legenda (URL)</label>
-          <input
-            type="text"
-            class="form-control"
-            id="videoSubtitle"
-            name="videoSubtitle"
-            placeholder="http://video.com/subtitles/video.vtt"
-            value="@Model?.Video?.Subtitle">
+          
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control videoSubtitle"
+              id="videoSubtitle"
+              name="videoSubtitle"
+              placeholder="http://video.com/subtitles/video.vtt"
+              value="@Model?.Video?.Subtitle"/>
+            
+            <button
+              class="btn btn-success btn-subtitle-file"
+              type="button"
+              onclick="$('#subtitle-file').click()">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+            </button>
+          </div>
+          
         </div>
       </div>
       

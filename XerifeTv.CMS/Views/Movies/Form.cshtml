@@ -217,15 +217,35 @@
         </div>
       </div>
 
-      <div class="mb-4">
-        <label for="videoSubtitle" class="form-label">Legenda (URL)</label>
-        <input 
-          type="text" 
-          class="form-control" 
-          id="videoSubtitle" 
-          name="videoSubtitle" 
-          placeholder="https://subtitle.com/vtts/video.vtt" 
-          value="@Model?.Video?.Subtitle">
+      <div class="row mb-4">
+        <div class="col-12">
+          <label for="videoSubtitle" class="form-label">Legenda (URL)</label>
+          
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              id="videoSubtitle"
+              name="videoSubtitle"
+              placeholder="https://subtitle.com/vtts/video.vtt"
+              value="@Model?.Video?.Subtitle">
+
+            <input 
+              id="subtitle-file" 
+              type="file" 
+              accept=".vtt" 
+              style="display: none" 
+              onchange="uploadSubtitleFile()"/>
+            
+            <button 
+              id="btn-subtitle-file" 
+              class="btn btn-success" 
+              type="button" 
+              onclick="$('#subtitle-file').click()">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+            </button>
+          </div>
+        </div>
       </div>
 
       <hr />
@@ -278,7 +298,29 @@
 
     function deleteMovie() {
       if (!confirm('Deseja realmente remover o filme?')) return;
-      location.href = '/Movies/Delete/@Model?.Id'
+      location.href = '/Movies/Delete/@Model?.Id';
+    }
+    
+    function uploadSubtitleFile() {
+      const fileInput = $('#subtitle-file')[0];
+      const file = fileInput.files[0];
+      
+      if (!file) return;
+      
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      $('#btn-subtitle-file').attr('disabled', 'true');
+      
+      fetch('/StorageFiles/UploadFile', {
+        method: 'POST',
+        body: formData
+      })
+        .then(response => response.json())
+        .then(({ isSuccess, data }) => {
+          if (isSuccess) $('#videoSubtitle').val(data);
+        })
+        .finally(() => $('#btn-subtitle-file').removeAttr('disabled'))
     }
   </script>
 }
