@@ -35,10 +35,11 @@ public sealed class ContentService(
       response = await _movieRepository.GetGroupByCategoryAsync(limit ?? limitPartialResult);
       _cacheService.SetValue(cacheKey, response);
     }
-
+    
     var result = response.Select(x =>
       new ItemsByCategory<GetMovieContentResponseDto>(
-        x.Category, x.Items.Select(GetMovieContentResponseDto.FromEntity)));
+        x.Category, x.Items.Select(GetMovieContentResponseDto.FromEntity)))
+      .OrderBy(x => x.Category);
 
     return Result<IEnumerable<ItemsByCategory<GetMovieContentResponseDto>>>
       .Success(result);
@@ -76,7 +77,8 @@ public sealed class ContentService(
 
     var result = response.Select(x =>
       new ItemsByCategory<GetSeriesContentResponseDto>(
-        x.Category, x.Items.Select(GetSeriesContentResponseDto.FromEntity)));
+        x.Category, x.Items.Select(GetSeriesContentResponseDto.FromEntity)))
+      .OrderBy(x => x.Category);
 
     return Result<IEnumerable<ItemsByCategory<GetSeriesContentResponseDto>>>
       .Success(result);
@@ -129,7 +131,8 @@ public sealed class ContentService(
 
     var result = response.Select(x =>
       new ItemsByCategory<GetChannelContentResponseDto>(
-        x.Category, x.Items.Select(GetChannelContentResponseDto.FromEntity)));
+        x.Category, x.Items.Select(GetChannelContentResponseDto.FromEntity)))
+      .OrderBy(x => x.Category);
 
     return Result<IEnumerable<ItemsByCategory<GetChannelContentResponseDto>>>
       .Success(result);
