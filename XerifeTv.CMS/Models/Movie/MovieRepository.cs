@@ -43,7 +43,8 @@ public sealed class MovieRepository(IOptions<DBSettings> options)
       .Aggregate()
       .Group(
         r => r.Category, 
-        g => new ItemsByCategory<MovieEntity>(g.Key, g.Take(limit).ToList()))
+        g => 
+          new ItemsByCategory<MovieEntity>(g.Key, g.OrderByDescending(x => x.CreateAt).Take(limit).ToList()))
       .ToListAsync();
   }
 }

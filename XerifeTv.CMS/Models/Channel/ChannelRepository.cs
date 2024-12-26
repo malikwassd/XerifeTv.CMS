@@ -42,7 +42,8 @@ public sealed class ChannelRepository(IOptions<DBSettings> options)
       .Aggregate()
       .Group(
         r => r.Category,
-        g => new ItemsByCategory<ChannelEntity>(g.Key, g.Take(limit).ToList()))
+        g => 
+          new ItemsByCategory<ChannelEntity>(g.Key, g.OrderByDescending(x => x.CreateAt).Take(limit).ToList()))
       .ToListAsync();
   }
 }
