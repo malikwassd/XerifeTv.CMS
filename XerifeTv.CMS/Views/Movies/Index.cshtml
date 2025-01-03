@@ -78,42 +78,53 @@
     @foreach (var movie in Model)
     {
       <div class="card col-2 pt-1">
-        <img 
-          src="@movie.PosterUrl"
-          onerror="this.onerror=null; this.src='/assets/poster_default.jpg';"
-          class="card-img-top" 
-          alt="@movie.Title" 
-          loading="lazy" style="height: 14rem;">
-        
+        <div class="w-auto h-100 position-relative">
+          <img
+            src="@movie.PosterUrl"
+            onerror="this.onerror=null; this.src='/assets/poster_default.jpg';"
+            class="card-img-top"
+            alt="@movie.Title"
+            loading="lazy" style="height: 14rem;"/>
+          
+          @if (@movie?.Video?.Subtitle != null)
+          {
+            <span 
+              class="position-absolute rounded-1 fw-bolder p-1 bg-info text-white" 
+              style="bottom: 6px; right: 6px; font-size: 12px;">
+              CC
+            </span>
+          }
+        </div>
+
         <div class="card-body">
-          <h5 class="card-title text-nowrap overflow-hidden text-truncate">@movie.Title</h5>
-          <p class="card-text">@movie.Category</p>
+          <h5 class="card-title text-nowrap overflow-hidden text-truncate">@movie?.Title</h5>
+          <p class="card-text">@movie?.Category</p>
 
           <div class="d-flex gap-1">
-            <a class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#movielDetailsModal-@movie.Id">
+            <a class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#movielDetailsModal-@movie?.Id">
               <i class="fa-solid fa-eye"></i>
             </a>
 
             @if (!User.IsInRole("visitor"))
             {
-              <a 
-                class="btn btn-sm btn-primary" 
-                asp-controller="Movies" 
-                asp-action="Form" 
-                asp-route-id="@movie.Id">
+              <a
+                class="btn btn-sm btn-primary"
+                asp-controller="Movies"
+                asp-action="Form"
+                asp-route-id="@movie?.Id">
                 <i class="fa-solid fa-pen-to-square"></i>
               </a>
             }
-            
-            <a 
-              class="btn btn-sm btn-secondary" 
-              data-bs-toggle="modal" 
+
+            <a
+              class="btn btn-sm btn-secondary"
+              data-bs-toggle="modal"
               data-bs-target="#videoModal"
-              data-bs-title="@movie.Title"
-              data-bs-banner="@movie.BannerUrl"
-              data-bs-video-url="@movie.Video?.Url"
-              data-bs-video-format="@movie.Video?.StreamFormat"
-              data-bs-video-subtitle="@movie.Video?.Subtitle">
+              data-bs-title="@movie?.Title"
+              data-bs-banner="@movie?.BannerUrl"
+              data-bs-video-url="@movie?.Video?.Url"
+              data-bs-video-format="@movie?.Video?.StreamFormat"
+              data-bs-video-subtitle="@movie?.Video?.Subtitle">
               <i class="fa-solid fa-play"></i>
             </a>
           </div>
@@ -147,7 +158,7 @@
           </a>
         </li>
         
-        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        @for (var i = 1; i <= ViewBag.TotalPages; i++)
         {
            <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
               <a 
