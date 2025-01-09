@@ -12,4 +12,5 @@ public interface IContentService
   Task<Result<IEnumerable<GetSeriesContentResponseDto>>> GetSeriesByCategory(string category, int? limit);
   Task<Result<IEnumerable<Episode>>> GetEpisodesSeriesBySeason(string serieId, int season);
   Task<Result<IEnumerable<ItemsByCategory<GetChannelContentResponseDto>>>> GetChannelsGroupByCategory(int? limit);
+  Task<Result<GetContentsByNameResponseDto>> GetContentsByTitle(string title, int? limit);
 }

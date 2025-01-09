@@ -12,6 +12,8 @@ using XerifeTv.CMS.Models.Series;
 using XerifeTv.CMS.Models.Abstractions.Services;
 using XerifeTv.CMS.Models.Movie;
 using XerifeTv.CMS.Models.Channel;
+using XerifeTv.CMS.Models.Channel.Dtos.Request;
+using XerifeTv.CMS.Models.Channel.Enums;
 
 namespace XerifeTv.CMS.Models.Content;
 
@@ -136,5 +138,38 @@ public sealed class ContentService(
 
     return Result<IEnumerable<ItemsByCategory<GetChannelContentResponseDto>>>
       .Success(result);
+  }
+
+  public async Task<Result<GetContentsByNameResponseDto>> GetContentsByTitle(string title, int? limit)
+  {
+    var cacheKey = $"contentsByTitle-{title}-{limit}";
+    var response = _cacheService.GetValue<GetContentsByNameResponseDto>(cacheKey);
+
+    if (response is null)
+    {
+      var moviesTask = _movieRepository.GetByFilterAsync(
+        new GetMoviesByFilterRequestDto(EMovieSearchFilter.TITLE, title, limit ?? limitTotalResult, 1));
+
+      var seriesTask = _seriesRepository.GetByFilterAsync(
+        new GetSeriesByFilterRequestDto(ESeriesSearchFilter.TITLE, title, limit ?? limitTotalResult, 1));
+
+      var channelsTask = _channelRepository.GetByFilterAsync(
+        new GetChannelsByFilterRequestDto(EChannelSearchFilter.TITLE, title, limit ?? limitTotalResult, 1));
+      
+      await Task.WhenAll(moviesTask, seriesTask, channelsTask);
+    
+      var movieListResponse = await moviesTask;
+      var seriesListResponse = await seriesTask;
+      var channelListResponse = await channelsTask;
+
+      response = new GetContentsByNameResponseDto(
+        movieListResponse.Items.Select(GetMovieContentResponseDto.FromEntity),
+        seriesListResponse.Items.Select(GetSeriesContentResponseDto.FromEntity),
+        channelListResponse.Items.Select(GetChannelContentResponseDto.FromEntity));
+      
+      _cacheService.SetValue(cacheKey, response);
+    }
+    
+    return Result<GetContentsByNameResponseDto>.Success(response);
   }
 }
