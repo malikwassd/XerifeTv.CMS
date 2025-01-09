@@ -66,4 +66,14 @@ public class ContentController(IContentService _service, ILogger<ContentControll
 
     return Ok(response.IsSuccess ? response.Data : []);
   }
+  
+  [HttpGet]
+  [Route("Search/{title}")]
+  public async Task<IActionResult> ContentsByTitle(string title, int? limit)
+  {
+    var response = await _service.GetContentsByTitle(title, limit);
+    _logger.LogInformation($"Request Content API /Search/{title}");
+
+    return Ok(response.IsSuccess ? response.Data : new object());
+  }
 }
