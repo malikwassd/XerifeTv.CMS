@@ -38,7 +38,7 @@ XerifeTv CMS is a content management system (CMS) developed for Over-The-Top (OT
 
 
 #### 1. Clone the repository:
-    git clone https://github.com/GilbertSilvaa/XerifeTv.CMS.git
+    git clone https://github.com/malikwassd/XerifeTv.CMS.git
 
 
 #### 2. Navigate to the project directory:
